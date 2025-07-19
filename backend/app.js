@@ -1,8 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
-require("dotenv").config();
 const app = express();
 const Blog = require("./models/Blog");
+require("dotenv").config();
+
+console.log("PROCESS ENV-------------------------", process.env);
 
 // Connect with DB and serve API
 mongoose
@@ -23,4 +25,15 @@ mongoose
 
 app.get("/", (req, res) => {
     res.send("Hello Devs");
+});
+
+// GET all Blog posts
+app.get("/api/posts", async (req, res) => {
+    try {
+        const allBlogs = await Blog.find({});
+        res.json(allBlogs);
+    } catch (err) {
+        console.error(err);
+        res.json(err);
+    }
 });
