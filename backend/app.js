@@ -23,6 +23,10 @@ mongoose
         console.error("MongoDB Connection Error", err);
     });
 
+// for JSON POST/PUT requests
+app.use(express.json());
+
+// Routes
 app.get("/", (req, res) => {
     res.send("Hello Devs");
 });
@@ -30,8 +34,11 @@ app.get("/", (req, res) => {
 // GET all blogposts
 app.get(
     "/api/posts",
-    catchAsync(async (req, res) => {
+    catchAsync(async (req, res, next) => {
         const allBlogs = await Blog.find({});
+        if (!allBlogs) {
+            return next(new AppError("Failed to load blogs", 500));
+        }
         res.status(200).json(allBlogs);
     })
 );
@@ -39,18 +46,10 @@ app.get(
 // GET a single blogpost from id
 app.get(
     "/api/posts/:id",
-    catchAsync(async (req, res) => {
+    catchAsync(async (req, res, next) => {
         const { id } = req.params;
-        try {
-            const blogFound = await Blog.findById(id);
-            if (!blogFound) {
-                return res.status(404).json({ error: "Blog not found." });
-            }
-            res.status(200).json(blogFound);
-        } catch (err) {
-            console.error(err);
-            res.status(500).json({ error: "Something went wrong." });
-        }
+        const blogFound = await Blog.findById(id);
+        res.status(200).json(blogFound);
     })
 );
 
