@@ -1,7 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const dotenv = require("dotenv");
+require("dotenv").config();
 const app = express();
+const Blog = require("./models/Blog");
 
 // Connect with DB and serve API
 mongoose
@@ -11,7 +12,9 @@ mongoose
 
         // Start server after DB is connected
         app.listen(process.env.PORT, () => {
-            console.log(`Devlog API is Listening on Port ${process.env.PORT}`);
+            console.log(
+                `Devblogs API is Listening on Port ${process.env.PORT}`
+            );
         });
     })
     .catch((err) => {
