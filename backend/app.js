@@ -4,6 +4,7 @@ const app = express();
 const Blog = require("./models/Blog");
 require("dotenv").config();
 const catchAsync = require("./utils/catchAsync");
+const AppError = require("./utils/AppError");
 
 // Connect with DB and serve API
 mongoose
