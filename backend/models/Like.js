@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 
 const likeSchema = new Schema(
     {
-        // owner
+        author: { type: Schema.Types.ObjectId, ref: "User", required: true },
         blog: { type: Schema.Types.ObjectId, ref: "Blog", required: true },
     },
     { timestamps: true }
