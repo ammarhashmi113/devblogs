@@ -8,7 +8,8 @@ const blogSchema = new Schema(
         title: { type: String, required: true },
         body: { type: String, required: true },
         comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
-        // author, likes
+        likes: [{ type: Schema.Types.ObjectId, ref: "Like" }],
+        // author
     },
     { timestamps: true }
 );
