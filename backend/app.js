@@ -199,6 +199,30 @@ app.put(
     })
 );
 
+// Delete a blogpost
+app.delete(
+    "/api/posts/:id",
+    isAuthenticated,
+    catchAsync(async (req, res, next) => {
+        const { id } = req.params;
+        const blog = await Blog.findById(id);
+
+        if (!blog) {
+            return next(new AppError("Blog with given id not found", 404));
+        }
+
+        // Making sure only blog author can edit or delete it.
+        if (!blog.author.equals(req.user._id)) {
+            return next(
+                new AppError("Unauthorized for deleting the blog", 401)
+            );
+        }
+
+        await blog.deleteOne();
+        res.status(200).json({ message: "Blog deleted successfully" });
+    })
+);
+
 // Error handling middleware
 app.use((err, req, res, next) => {
     let { message = "Something went wrong", statusCode = 500 } = err;
