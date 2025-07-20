@@ -7,6 +7,7 @@ const Blog = require("./models/Blog");
 require("dotenv").config();
 const catchAsync = require("./utils/catchAsync");
 const AppError = require("./utils/AppError");
+const isAuthenticated = require("./middlewares/isAuthenticated");
 
 // Connect with DB and serve API
 mongoose
@@ -140,6 +141,29 @@ app.get(
         const { id } = req.params;
         const blogFound = await Blog.findById(id);
         res.status(200).json(blogFound);
+    })
+);
+
+// POST a blogpost (authenticated user)
+app.post(
+    "/api/posts",
+    isAuthenticated,
+    catchAsync(async (req, res, next) => {
+        const author = req.user._id; // logged in user is attached to request object in isAuthenticated middleware
+        const { title, body } = req.body; // from request sent from client
+
+        // Checking if a blog with same title exists
+        const blogWithSameNameFound = await Blog.findOne({ title });
+        console.log(blogWithSameNameFound);
+        if (blogWithSameNameFound) {
+            return next(
+                new AppError("Blog with this title already exists", 409) // 402 status code = conflict
+            );
+        }
+
+        const blog = new Blog({ author, title, body });
+        await blog.save();
+        res.status(201).json(blog);
     })
 );
 
