@@ -167,6 +167,38 @@ app.post(
     })
 );
 
+// Edit (PUT) a blogpost
+app.put(
+    "/api/posts/:id",
+    isAuthenticated,
+    catchAsync(async (req, res, next) => {
+        const { id } = req.params;
+        const { title, body } = req.body;
+        const blogWithIdFound = await Blog.findOne({ _id: id });
+
+        if (!blogWithIdFound) {
+            return next(new AppError("Blog with given id not found", 404));
+        }
+
+        // Blog title and body must be provided (again) while updating, for now
+        if (!title || !body) {
+            return next(new AppError("Blog title and body are required", 400));
+        }
+
+        // Making sure only blog author can edit or delete it.
+        if (!blogWithIdFound.author.equals(req.user._id)) {
+            return next(new AppError("Unauthorized for editing the blog", 401));
+        }
+
+        const updatedBlog = await Blog.findByIdAndUpdate(
+            id,
+            { title, body },
+            { new: true }
+        );
+        res.status(200).json(updatedBlog);
+    })
+);
+
 // Error handling middleware
 app.use((err, req, res, next) => {
     let { message = "Something went wrong", statusCode = 500 } = err;
