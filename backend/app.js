@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const app = express();
 const User = require("./models/User");
 const Blog = require("./models/Blog");
+const Comment = require("./models/Comment");
 require("dotenv").config();
 const catchAsync = require("./utils/catchAsync");
 const AppError = require("./utils/AppError");
@@ -127,9 +128,6 @@ app.get(
     "/api/posts",
     catchAsync(async (req, res, next) => {
         const allBlogs = await Blog.find({});
-        if (!allBlogs) {
-            return next(new AppError("Failed to load blogs", 500));
-        }
         res.status(200).json(allBlogs);
     })
 );
@@ -139,7 +137,17 @@ app.get(
     "/api/posts/:id",
     catchAsync(async (req, res, next) => {
         const { id } = req.params;
-        const blogFound = await Blog.findById(id);
+        const blogFound = await Blog.findById(id)
+            .populate("author", "username")
+            .populate({
+                path: "comments",
+                select: "author body createdAt",
+                populate: { path: "author", select: "username" },
+            });
+
+        if (!blogFound) {
+            return next(new AppError("Blog not found", 404));
+        }
         res.status(200).json(blogFound);
     })
 );
@@ -153,17 +161,21 @@ app.post(
         const { title, body } = req.body; // from request sent from client
 
         // Checking if a blog with same title exists
-        const blogWithSameNameFound = await Blog.findOne({ title });
-        console.log(blogWithSameNameFound);
+        const blogWithSameNameFound = await Blog.findOne({
+            title: new RegExp(`^${title.trim()}$`, "i"), // case insensitive check for title
+        });
+
         if (blogWithSameNameFound) {
             return next(
-                new AppError("Blog with this title already exists", 409) // 402 status code = conflict
+                new AppError("Blog with this title already exists", 409)
             );
         }
 
         const blog = new Blog({ author, title, body });
         await blog.save();
-        res.status(201).json(blog);
+
+        const populatedBlog = await blog.populate("author", "username");
+        res.status(201).json(populatedBlog);
     })
 );
 
@@ -220,6 +232,30 @@ app.delete(
 
         await blog.deleteOne();
         res.status(200).json({ message: "Blog deleted successfully" });
+    })
+);
+
+// Add a comment to a blogpost
+app.post(
+    "/api/posts/:id/comments",
+    isAuthenticated,
+    catchAsync(async (req, res, next) => {
+        const { id } = req.params;
+        // we need to only get comment body from client.
+        const { body } = req.body;
+        const blog = await Blog.findById(id);
+
+        if (!blog) {
+            return next(new AppError("Blog with given id not found", 404));
+        }
+
+        const comment = new Comment({ author: req.user, blog: blog._id, body });
+        blog.comments.push(comment._id);
+        await comment.save();
+        await blog.save();
+        // populate author
+        await comment.populate("author");
+        res.status(201).json({ comment });
     })
 );
 
