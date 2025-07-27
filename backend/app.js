@@ -173,7 +173,7 @@ app.post(
 
         if (blogWithSameNameFound) {
             return next(
-                new AppError("Blog with this title already exists", 409)
+                new AppError("Blog with this title already exists.", 409)
             );
         }
 
@@ -195,17 +195,24 @@ app.put(
         const blogWithIdFound = await Blog.findOne({ _id: id });
 
         if (!blogWithIdFound) {
-            return next(new AppError("Blog with given id not found", 404));
+            return next(
+                new AppError("Blog with the given id was not found.", 404)
+            );
         }
 
         // Blog title and body must be provided (again) while updating, for now
         if (!title || !body) {
-            return next(new AppError("Blog title and body are required", 400));
+            return next(new AppError("Blog title and body are required.", 400));
         }
 
         // Making sure only blog author can edit or delete it.
         if (!blogWithIdFound.author.equals(req.user._id)) {
-            return next(new AppError("Unauthorized for editing the blog", 401));
+            return next(
+                new AppError(
+                    "User is unauthorized for updating this blog.",
+                    401
+                )
+            );
         }
 
         const updatedBlog = await Blog.findByIdAndUpdate(
@@ -224,20 +231,21 @@ app.delete(
     catchAsync(async (req, res, next) => {
         const { id } = req.params;
         const blog = await Blog.findById(id);
-
         if (!blog) {
-            return next(new AppError("Blog with given id not found", 404));
+            return next(
+                new AppError("Blog with the given id was not found.", 404)
+            );
         }
 
         // Making sure only blog author can edit or delete it.
         if (!blog.author.equals(req.user._id)) {
             return next(
-                new AppError("Unauthorized for deleting the blog", 401)
+                new AppError("User is unauthorized for deleting this blog", 403)
             );
         }
 
         await blog.deleteOne();
-        res.status(200).json({ message: "Blog deleted successfully" });
+        res.status(200).json({ message: "Blog deleted successfully." });
     })
 );
 
@@ -249,7 +257,9 @@ app.post(
         const { id } = req.params;
         const blog = await Blog.findById(id);
         if (!blog) {
-            return next(new AppError("Blog with given id not found", 404));
+            return next(
+                new AppError("Blog with the given id was not found.", 404)
+            );
         }
 
         // we need to only get comment body from client.
@@ -261,7 +271,9 @@ app.post(
         await blog.save();
         // populate author
         await comment.populate("author");
-        res.status(201).json({ comment });
+        res.status(201).json({
+            message: "Successfully added comment to the blogpost.",
+        });
     })
 );
 
@@ -273,7 +285,9 @@ app.post(
         const { id } = req.params;
         const blog = await Blog.findById(id);
         if (!blog) {
-            return next(new AppError("Blog with given id not found"));
+            return next(
+                new AppError("Blog with the given id was not found.", 404)
+            );
         }
 
         // Making sure that a user can only add one like to a blogpost
@@ -282,15 +296,20 @@ app.post(
             blog: blog._id,
         });
         if (alreadyLiked) {
-            return next(new AppError("Like already added by user"));
+            return next(
+                new AppError(
+                    "Like for this blog is already added by the user.",
+                    403
+                )
+            );
         }
 
         // Making sure blog author cant add a like to their blogpost
         if (blog.author.equals(req.user._id)) {
-            return next(new AppError("Blog author cannot like their blogpost"));
+            return next(
+                new AppError("Blog author cannot like their own blogpost.", 403)
+            );
         }
-
-        // Making sure a user cannot add more than one like to a blogpost
 
         const like = new Like({ author: req.user, blog: blog._id });
         blog.likes.push(like._id);
@@ -299,15 +318,43 @@ app.post(
         await blog.save();
 
         res.status(201).json({
-            status: "success",
-            message: "Like successfully added to the blogpost",
+            message: "Successfully liked the blogpost.",
         });
+    })
+);
+
+// Unlike a blogpost
+app.delete(
+    "/api/posts/:id/likes",
+    isAuthenticated,
+    catchAsync(async (req, res, next) => {
+        const { id } = req.params;
+        const blog = await Blog.findById(id);
+        if (!blog) {
+            return next(
+                new AppError("Blog with the given id was not found.", 404)
+            );
+        }
+
+        // First Check if current logged-in user has a like made for this particular blog
+        const like = await Like.findOne({ author: req.user, blog: blog._id });
+        if (!like) {
+            return next(new AppError("The user has not liked this blog.", 404));
+        }
+
+        // Delete the like document
+        await Like.findByIdAndDelete(like._id);
+
+        // delete like from likes array in blog (which hold Like model's reference)
+        await Blog.findByIdAndUpdate(blog._id, { $pull: { likes: like._id } });
+
+        res.status(200).json({ message: "Successfully unliked the blogpost." });
     })
 );
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-    let { message = "Something went wrong", statusCode = 500 } = err;
+    let { message = "Something went wrong.", statusCode = 500 } = err;
 
     // If the error is an instance of AppError, use its properties for message and status code
     if (err instanceof AppError) {
