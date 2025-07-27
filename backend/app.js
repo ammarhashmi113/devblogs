@@ -240,7 +240,10 @@ app.delete(
         // Making sure only blog author can edit or delete it.
         if (!blog.author.equals(req.user._id)) {
             return next(
-                new AppError("User is unauthorized for deleting this blog", 403)
+                new AppError(
+                    "User is unauthorized for deleting this blog.",
+                    403
+                )
             );
         }
 
@@ -274,6 +277,57 @@ app.post(
         res.status(201).json({
             message: "Successfully added comment to the blogpost.",
         });
+    })
+);
+
+// Remove a comment from a blogpost
+app.delete(
+    "/api/posts/:id/comments/:commentId",
+    isAuthenticated,
+    catchAsync(async (req, res, next) => {
+        const { id } = req.params;
+        const blog = await Blog.findById(id);
+        if (!blog) {
+            return next(
+                new AppError("Blog with the given id was not found.", 404)
+            );
+        }
+
+        // Also checking if comment id is valid
+        const { commentId } = req.params;
+        const comment = await Comment.findById(commentId);
+        if (!comment) {
+            return next(
+                new AppError("Comment with the given id was not found.", 404)
+            );
+        }
+
+        // Only allowing comment author to delete the comment
+        if (!req.user.equals(comment.author)) {
+            return next(
+                new AppError("User is unauthorized to delete this comment", 403)
+            );
+        }
+
+        // First we need to check that whether the given blog has the given comment in it. Otherwise, we will refuse deleting it.
+        if (!comment.blog.equals(blog._id)) {
+            return next(
+                new AppError(
+                    "Given comment is not attached to the given blog.",
+                    404
+                )
+            );
+        }
+
+        // Delete the comment document
+        await Comment.findByIdAndDelete(commentId);
+
+        // Remove comment from comments array in blog (which hold comment model's reference)
+        await Blog.findByIdAndUpdate(blog._id, {
+            $pull: { comments: commentId },
+        });
+
+        res.status(201).json({ message: "Successfully deleted the comment." });
     })
 );
 
@@ -345,10 +399,10 @@ app.delete(
         // Delete the like document
         await Like.findByIdAndDelete(like._id);
 
-        // delete like from likes array in blog (which hold Like model's reference)
+        // Remove like from likes array in blog (which hold Like model's reference)
         await Blog.findByIdAndUpdate(blog._id, { $pull: { likes: like._id } });
 
-        res.status(200).json({ message: "Successfully unliked the blogpost." });
+        res.status(201).json({ message: "Successfully unliked the blogpost." });
     })
 );
 
