@@ -19,7 +19,7 @@ const userSchema = new Schema(
             unique: true,
             match: [/.+@.+\..+/, "Invalid email format."],
         },
-        password: { type: String, required: true, minlength: 8, select: false },
+        password: { type: String, required: true, minlength: 8 },
     },
     { timestamps: true }
 );

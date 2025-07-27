@@ -5,6 +5,7 @@ const app = express();
 const User = require("./models/User");
 const Blog = require("./models/Blog");
 const Comment = require("./models/Comment");
+const Like = require("./models/Like");
 require("dotenv").config();
 const catchAsync = require("./utils/catchAsync");
 const AppError = require("./utils/AppError");
@@ -143,6 +144,11 @@ app.get(
                 path: "comments",
                 select: "author body createdAt",
                 populate: { path: "author", select: "username" },
+            })
+            .populate({
+                path: "likes",
+                select: "author createdAt",
+                populate: { path: "author", select: "username" },
             });
 
         if (!blogFound) {
@@ -241,13 +247,13 @@ app.post(
     isAuthenticated,
     catchAsync(async (req, res, next) => {
         const { id } = req.params;
-        // we need to only get comment body from client.
-        const { body } = req.body;
         const blog = await Blog.findById(id);
-
         if (!blog) {
             return next(new AppError("Blog with given id not found", 404));
         }
+
+        // we need to only get comment body from client.
+        const { body } = req.body;
 
         const comment = new Comment({ author: req.user, blog: blog._id, body });
         blog.comments.push(comment._id);
@@ -256,6 +262,46 @@ app.post(
         // populate author
         await comment.populate("author");
         res.status(201).json({ comment });
+    })
+);
+
+// Add a like to a blogpost
+app.post(
+    "/api/posts/:id/likes",
+    isAuthenticated,
+    catchAsync(async (req, res, next) => {
+        const { id } = req.params;
+        const blog = await Blog.findById(id);
+        if (!blog) {
+            return next(new AppError("Blog with given id not found"));
+        }
+
+        // Making sure that a user can only add one like to a blogpost
+        const alreadyLiked = await Like.findOne({
+            author: req.user,
+            blog: blog._id,
+        });
+        if (alreadyLiked) {
+            return next(new AppError("Like already added by user"));
+        }
+
+        // Making sure blog author cant add a like to their blogpost
+        if (blog.author.equals(req.user._id)) {
+            return next(new AppError("Blog author cannot like their blogpost"));
+        }
+
+        // Making sure a user cannot add more than one like to a blogpost
+
+        const like = new Like({ author: req.user, blog: blog._id });
+        blog.likes.push(like._id);
+
+        await like.save();
+        await blog.save();
+
+        res.status(201).json({
+            status: "success",
+            message: "Like successfully added to the blogpost",
+        });
     })
 );
 
