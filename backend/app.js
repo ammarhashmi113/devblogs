@@ -130,7 +130,7 @@ app.get(
     "/api/posts",
     catchAsync(async (req, res, next) => {
         const allBlogs = await Blog.find({});
-        res.status(200).json(allBlogs);
+        res.status(200).json({ status: "success", data: { blogs: allBlogs } });
     })
 );
 
@@ -156,7 +156,7 @@ app.get(
         if (!blog) {
             return next(new AppError("Blog not found", 404));
         }
-        res.status(200).json(blog);
+        res.status(200).json({ status: "success", data: { blog } });
     })
 );
 
@@ -183,7 +183,10 @@ app.post(
         await blog.save();
 
         const populatedBlog = await blog.populate("author", "username");
-        res.status(201).json({ status: "success", populatedBlog });
+        res.status(201).json({
+            status: "success",
+            data: { blog: populatedBlog },
+        });
     })
 );
 
@@ -216,7 +219,10 @@ app.put(
             { title, body },
             { new: true }
         );
-        res.status(200).json({ status: "success", updatedBlog });
+        res.status(200).json({
+            status: "success",
+            data: { blog: updatedBlog },
+        });
     })
 );
 
