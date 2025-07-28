@@ -138,7 +138,7 @@ app.get(
     "/api/posts/:id",
     catchAsync(async (req, res, next) => {
         const { id } = req.params;
-        const blogFound = await Blog.findById(id)
+        const blog = await Blog.findById(id)
             .populate("author", "username")
             .populate({
                 path: "comments",
@@ -151,10 +151,10 @@ app.get(
                 populate: { path: "author", select: "username" },
             });
 
-        if (!blogFound) {
+        if (!blog) {
             return next(new AppError("Blog not found", 404));
         }
-        res.status(200).json(blogFound);
+        res.status(200).json(blog);
     })
 );
 
@@ -181,7 +181,7 @@ app.post(
         await blog.save();
 
         const populatedBlog = await blog.populate("author", "username");
-        res.status(201).json(populatedBlog);
+        res.status(201).json({ status: "success", populatedBlog });
     })
 );
 
@@ -220,7 +220,7 @@ app.put(
             { title, body },
             { new: true }
         );
-        res.status(200).json(updatedBlog);
+        res.status(200).json({ status: "success", updatedBlog });
     })
 );
 
@@ -248,7 +248,10 @@ app.delete(
         }
 
         await blog.deleteOne();
-        res.status(200).json({ message: "Blog deleted successfully." });
+        res.status(200).json({
+            status: "success",
+            message: "Blog deleted successfully.",
+        });
     })
 );
 
@@ -275,6 +278,7 @@ app.post(
         // populate author
         await comment.populate("author");
         res.status(201).json({
+            status: "success",
             message: "Successfully added comment to the blogpost.",
         });
     })
@@ -285,6 +289,7 @@ app.delete(
     "/api/posts/:id/comments/:commentId",
     isAuthenticated,
     catchAsync(async (req, res, next) => {
+        // Checking if the blog with the id exists
         const { id } = req.params;
         const blog = await Blog.findById(id);
         if (!blog) {
@@ -293,7 +298,7 @@ app.delete(
             );
         }
 
-        // Also checking if comment id is valid
+        // Also checking if comment witht he id exists
         const { commentId } = req.params;
         const comment = await Comment.findById(commentId);
         if (!comment) {
@@ -327,7 +332,10 @@ app.delete(
             $pull: { comments: commentId },
         });
 
-        res.status(201).json({ message: "Successfully deleted the comment." });
+        res.status(200).json({
+            status: "success",
+            message: "Successfully deleted comment from the blogpost.",
+        });
     })
 );
 
@@ -372,6 +380,7 @@ app.post(
         await blog.save();
 
         res.status(201).json({
+            status: "message",
             message: "Successfully liked the blogpost.",
         });
     })
@@ -402,7 +411,10 @@ app.delete(
         // Remove like from likes array in blog (which hold Like model's reference)
         await Blog.findByIdAndUpdate(blog._id, { $pull: { likes: like._id } });
 
-        res.status(201).json({ message: "Successfully unliked the blogpost." });
+        res.status(200).json({
+            status: "success",
+            message: "Successfully unliked the blogpost.",
+        });
     })
 );
 
