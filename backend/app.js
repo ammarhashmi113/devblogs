@@ -10,6 +10,7 @@ require("dotenv").config();
 const catchAsync = require("./utils/catchAsync");
 const AppError = require("./utils/AppError");
 const isAuthenticated = require("./middlewares/isAuthenticated");
+const blogWithIdExists = require("./middlewares/blogWithIdExists");
 
 // Connect with DB and serve API
 mongoose
@@ -136,6 +137,7 @@ app.get(
 // GET a single blogpost from id
 app.get(
     "/api/posts/:id",
+    blogWithIdExists,
     catchAsync(async (req, res, next) => {
         const { id } = req.params;
         const blog = await Blog.findById(id)
@@ -189,16 +191,10 @@ app.post(
 app.put(
     "/api/posts/:id",
     isAuthenticated,
+    blogWithIdExists,
     catchAsync(async (req, res, next) => {
-        const { id } = req.params;
+        const blog = req.blog; // Blog is attached with request body in "blodWithIdExists" middleware
         const { title, body } = req.body;
-        const blogWithIdFound = await Blog.findOne({ _id: id });
-
-        if (!blogWithIdFound) {
-            return next(
-                new AppError("Blog with the given id was not found.", 404)
-            );
-        }
 
         // Blog title and body must be provided (again) while updating, for now
         if (!title || !body) {
@@ -206,7 +202,7 @@ app.put(
         }
 
         // Making sure only blog author can edit or delete it.
-        if (!blogWithIdFound.author.equals(req.user._id)) {
+        if (!blog.author.equals(req.user._id)) {
             return next(
                 new AppError(
                     "User is unauthorized for updating this blog.",
@@ -228,14 +224,9 @@ app.put(
 app.delete(
     "/api/posts/:id",
     isAuthenticated,
+    blogWithIdExists,
     catchAsync(async (req, res, next) => {
-        const { id } = req.params;
-        const blog = await Blog.findById(id);
-        if (!blog) {
-            return next(
-                new AppError("Blog with the given id was not found.", 404)
-            );
-        }
+        const blog = req.blog;
 
         // Making sure only blog author can edit or delete it.
         if (!blog.author.equals(req.user._id)) {
@@ -259,14 +250,9 @@ app.delete(
 app.post(
     "/api/posts/:id/comments",
     isAuthenticated,
+    blogWithIdExists,
     catchAsync(async (req, res, next) => {
-        const { id } = req.params;
-        const blog = await Blog.findById(id);
-        if (!blog) {
-            return next(
-                new AppError("Blog with the given id was not found.", 404)
-            );
-        }
+        const blog = req.blog;
 
         // we need to only get comment body from client.
         const { body } = req.body;
@@ -288,17 +274,11 @@ app.post(
 app.delete(
     "/api/posts/:id/comments/:commentId",
     isAuthenticated,
+    blogWithIdExists,
     catchAsync(async (req, res, next) => {
-        // Checking if the blog with the id exists
-        const { id } = req.params;
-        const blog = await Blog.findById(id);
-        if (!blog) {
-            return next(
-                new AppError("Blog with the given id was not found.", 404)
-            );
-        }
+        const blog = req.blog;
 
-        // Also checking if comment witht he id exists
+        // Checking if comment witht he id exists
         const { commentId } = req.params;
         const comment = await Comment.findById(commentId);
         if (!comment) {
@@ -314,7 +294,7 @@ app.delete(
             );
         }
 
-        // First we need to check that whether the given blog has the given comment in it. Otherwise, we will refuse deleting it.
+        // Make sure the comment belongs to the blog
         if (!comment.blog.equals(blog._id)) {
             return next(
                 new AppError(
@@ -343,14 +323,9 @@ app.delete(
 app.post(
     "/api/posts/:id/likes",
     isAuthenticated,
+    blogWithIdExists,
     catchAsync(async (req, res, next) => {
-        const { id } = req.params;
-        const blog = await Blog.findById(id);
-        if (!blog) {
-            return next(
-                new AppError("Blog with the given id was not found.", 404)
-            );
-        }
+        const blog = req.blog;
 
         // Making sure that a user can only add one like to a blogpost
         const alreadyLiked = await Like.findOne({
@@ -390,14 +365,9 @@ app.post(
 app.delete(
     "/api/posts/:id/likes",
     isAuthenticated,
+    blogWithIdExists,
     catchAsync(async (req, res, next) => {
-        const { id } = req.params;
-        const blog = await Blog.findById(id);
-        if (!blog) {
-            return next(
-                new AppError("Blog with the given id was not found.", 404)
-            );
-        }
+        const blog = req.body;
 
         // First Check if current logged-in user has a like made for this particular blog
         const like = await Like.findOne({ author: req.user, blog: blog._id });
