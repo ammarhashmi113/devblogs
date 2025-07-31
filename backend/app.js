@@ -134,7 +134,7 @@ app.get(
     "/api/posts",
     catchAsync(async (req, res, next) => {
         console.log("GET BLOGPOSTS REQUEST WAS MADE");
-        const allBlogs = await Blog.find({});
+        const allBlogs = await Blog.find({}).populate("author", "username");
         res.status(200).json({ status: "success", data: { blogs: allBlogs } });
     })
 );
