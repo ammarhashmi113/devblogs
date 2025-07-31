@@ -51,9 +51,17 @@ function BlogDetailsPage() {
                 • {format(new Date(blog.createdAt), "PPP")}
             </p>
 
+            <img
+                src={blog.imageUrl}
+                alt={blog.title}
+                className="w-full h-auto rounded-lg mb-6 object-cover"
+            />
+
             <div className="prose max-w-none mb-10">
-                {blog.body.split("\n").map((para, idx) => (
-                    <p key={idx}>{para}</p>
+                {blog.body.split("\n\n").map((para, idx) => (
+                    <p key={idx} className="mb-6">
+                        {para}
+                    </p>
                 ))}
             </div>
 
