@@ -171,7 +171,7 @@ app.post(
     isAuthenticated,
     catchAsync(async (req, res, next) => {
         const author = req.user._id; // logged in user is attached to request object in isAuthenticated middleware
-        const { title, body } = req.body; // from request sent from client
+        const { title, body, imageUrl, tags } = req.body; // from request sent from client
 
         // Checking if a blog with same title exists
         const blogWithSameNameFound = await Blog.findOne({
@@ -184,13 +184,30 @@ app.post(
             );
         }
 
-        const blog = new Blog({ author, title, body });
+        // Validate if blog tags (tags should be an array and there should be atleast one tag in the array)
+        if (!tags || !Array.isArray(tags) || tags.length === 0) {
+            return next(new AppError("Please provide at least one tag.", 400));
+        }
+
+        // Cleaning and normalizing the tags
+        const cleanedTags = tags.map((tag) => tag.trim().toLowerCase());
+
+        const finalImageUrl =
+            imageUrl ||
+            "https://images.pexels.com/photos/262508/pexels-photo-262508.jpeg?_gl=1*elp6w1*_ga*OTc0MTk3NjY4LjE3NTIwOTYxNzg.*_ga_8JE65Q40S6*czE3NTM5NzYyMjYkbzEyJGcxJHQxNzUzOTc2MzA5JGo0OCRsMCRoMA.."; // Using default image url if image url not provided
+
+        const blog = new Blog({
+            author,
+            title,
+            body,
+            imageUrl: finalImageUrl,
+            tags: cleanedTags,
+        });
         await blog.save();
 
-        const populatedBlog = await blog.populate("author", "username");
         res.status(201).json({
             status: "success",
-            data: { blog: populatedBlog },
+            message: "Successfully created the blogpost.",
         });
     })
 );
