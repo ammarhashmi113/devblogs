@@ -30,7 +30,9 @@ function BlogsPage() {
                 return (
                     <div key={blog._id}>
                         {console.log(blog)}
-                        <p>Title: {blog.title}</p>
+                        <h1 className="text-3xl font-bold underline">
+                            Title: {blog.title}
+                        </h1>
                         <p>Blog Content: {blog.body}</p>
                         <p>Blog Author: {blog.author}</p>
                         <p>{blog.likes.length} likes</p>
