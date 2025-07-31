@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
+const cors = require("cors");
 const app = express();
 const User = require("./models/User");
 const Blog = require("./models/Blog");
@@ -31,6 +32,9 @@ mongoose
 
 // for JSON POST/PUT requests
 app.use(express.json());
+
+// Configuring Cors
+app.use(cors({ origin: "*", credentials: true }));
 
 // -----Auth Routes-----
 
@@ -129,6 +133,7 @@ app.get("/", (req, res) => {
 app.get(
     "/api/posts",
     catchAsync(async (req, res, next) => {
+        console.log("GET BLOGPOSTS REQUEST WAS MADE");
         const allBlogs = await Blog.find({});
         res.status(200).json({ status: "success", data: { blogs: allBlogs } });
     })

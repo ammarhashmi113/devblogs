@@ -1,5 +1,7 @@
+import BlogsPage from "./pages/BlogsPage";
+
 function App() {
-    return <h1>Hello Devs, from Devblog's frontend</h1>;
+    return <BlogsPage />;
 }
 
 export default App;
