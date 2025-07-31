@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import BlogCard from "../components/BlogCard";
 
 function BlogsPage() {
     const [blogs, setBlogs] = useState([]);
@@ -27,18 +28,7 @@ function BlogsPage() {
     return (
         <div>
             {blogs.map((blog) => {
-                return (
-                    <div key={blog._id}>
-                        {console.log(blog)}
-                        <h1 className="text-3xl font-bold underline">
-                            Title: {blog.title}
-                        </h1>
-                        <p>Blog Content: {blog.body}</p>
-                        <p>Blog Author: {blog.author}</p>
-                        <p>{blog.likes.length} likes</p>
-                        <p>{blog.comments.length} comments</p>
-                    </div>
-                );
+                return <BlogCard key={blog._id} blog={blog}></BlogCard>;
             })}
         </div>
     );
