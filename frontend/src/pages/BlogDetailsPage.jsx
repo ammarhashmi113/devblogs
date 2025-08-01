@@ -51,6 +51,17 @@ function BlogDetailsPage() {
                 • {format(new Date(blog.createdAt), "PPP")}
             </p>
 
+            <div className="flex flex-wrap gap-2 mb-6">
+                {blog.tags.map((tag, idx) => (
+                    <span
+                        key={idx}
+                        className="bg-blue-100 text-blue-700 text-xs font-medium px-2.5 py-1 rounded-full"
+                    >
+                        {tag}
+                    </span>
+                ))}
+            </div>
+
             <img
                 src={blog.imageUrl}
                 alt={blog.title}

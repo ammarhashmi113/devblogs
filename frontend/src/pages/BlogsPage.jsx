@@ -26,10 +26,16 @@ function BlogsPage() {
     if (loading) return <div>Blogs Loading</div>;
 
     return (
-        <div>
-            {blogs.map((blog) => {
-                return <BlogCard key={blog._id} blog={blog}></BlogCard>;
-            })}
+        <div className="max-w-6xl mx-auto px-4 py-10">
+            <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center text-gray-800">
+                Latest Blogs
+            </h1>
+
+            <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                {blogs.map((blog) => (
+                    <BlogCard key={blog._id} blog={blog} />
+                ))}
+            </div>
         </div>
     );
 }

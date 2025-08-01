@@ -219,12 +219,25 @@ app.put(
     blogWithIdExists,
     catchAsync(async (req, res, next) => {
         const blog = req.blog; // Blog is attached with request body in "blodWithIdExists" middleware
-        const { title, body } = req.body;
+        const { id } = req.params;
+        const { title, body, imageUrl, tags } = req.body;
 
         // Blog title and body must be provided (again) while updating, for now
         if (!title || !body) {
             return next(new AppError("Blog title and body are required.", 400));
         }
+
+        // Validate if blog tags (tags should be an array and there should be atleast one tag in the array)
+        if (!tags || !Array.isArray(tags) || tags.length === 0) {
+            return next(new AppError("Please provide at least one tag.", 400));
+        }
+
+        // Cleaning and normalizing the tags
+        const cleanedTags = tags.map((tag) => tag.trim().toLowerCase());
+
+        const finalImageUrl =
+            imageUrl ||
+            "https://images.pexels.com/photos/262508/pexels-photo-262508.jpeg?_gl=1*elp6w1*_ga*OTc0MTk3NjY4LjE3NTIwOTYxNzg.*_ga_8JE65Q40S6*czE3NTM5NzYyMjYkbzEyJGcxJHQxNzUzOTc2MzA5JGo0OCRsMCRoMA.."; // Using default image url if image url not provided
 
         // Making sure only blog author can edit or delete it.
         if (!blog.author.equals(req.user._id)) {
@@ -238,7 +251,7 @@ app.put(
 
         const updatedBlog = await Blog.findByIdAndUpdate(
             id,
-            { title, body },
+            { title, body, imageUrl: finalImageUrl, tags: cleanedTags },
             { new: true }
         );
         res.status(200).json({
