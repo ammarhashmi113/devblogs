@@ -3,6 +3,8 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { format } from "date-fns";
 
+const apiUrl = import.meta.env.VITE_API_BASE_URL;
+
 function BlogDetailsPage() {
     const { id } = useParams(); // blospost id
     const [blog, setBlog] = useState({});
@@ -10,10 +12,7 @@ function BlogDetailsPage() {
 
     async function fetchBlog() {
         try {
-            const res = await axios.get(
-                `http://localhost:3000/api/posts/${id}`
-            );
-            console.log(res.data.data.blog);
+            const res = await axios.get(`${apiUrl}/posts/${id}`);
             setBlog(res.data.data.blog);
         } catch (err) {
             console.error("Error fetching blog:", err);

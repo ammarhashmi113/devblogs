@@ -2,6 +2,8 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import BlogCard from "../components/BlogCard";
 
+const apiUrl = import.meta.env.VITE_API_BASE_URL;
+
 function BlogsPage() {
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -9,7 +11,7 @@ function BlogsPage() {
     // Fetch Blogposts from API and store them in state variable
     async function fetchBlogs() {
         try {
-            const res = await axios.get("http://localhost:3000/api/posts");
+            const res = await axios.get(`${apiUrl}/posts`);
             setBlogs(res.data.data.blogs);
         } catch (err) {
             console.error("Error fetching blogs:", err);
