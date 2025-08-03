@@ -199,15 +199,11 @@ app.post(
         // Cleaning and normalizing the tags
         const cleanedTags = tags.map((tag) => tag.trim().toLowerCase());
 
-        const finalImageUrl =
-            imageUrl ||
-            "https://images.pexels.com/photos/262508/pexels-photo-262508.jpeg?_gl=1*elp6w1*_ga*OTc0MTk3NjY4LjE3NTIwOTYxNzg.*_ga_8JE65Q40S6*czE3NTM5NzYyMjYkbzEyJGcxJHQxNzUzOTc2MzA5JGo0OCRsMCRoMA.."; // Using default image url if image url not provided
-
         const blog = new Blog({
             author,
             title,
             body,
-            imageUrl: finalImageUrl,
+            imageUrl: imageUrl?.trim() || undefined, // fallback triggers pre-save default
             tags: cleanedTags,
         });
         await blog.save();
@@ -242,10 +238,6 @@ app.put(
         // Cleaning and normalizing the tags
         const cleanedTags = tags.map((tag) => tag.trim().toLowerCase());
 
-        const finalImageUrl =
-            imageUrl ||
-            "https://images.pexels.com/photos/262508/pexels-photo-262508.jpeg?_gl=1*elp6w1*_ga*OTc0MTk3NjY4LjE3NTIwOTYxNzg.*_ga_8JE65Q40S6*czE3NTM5NzYyMjYkbzEyJGcxJHQxNzUzOTc2MzA5JGo0OCRsMCRoMA.."; // Using default image url if image url not provided
-
         // Making sure only blog author can edit or delete it.
         if (!blog.author.equals(req.user._id)) {
             return next(
@@ -258,8 +250,13 @@ app.put(
 
         const updatedBlog = await Blog.findByIdAndUpdate(
             id,
-            { title, body, imageUrl: finalImageUrl, tags: cleanedTags },
-            { new: true }
+            {
+                title,
+                body,
+                imageUrl: imageUrl?.trim() || undefined, // fallback triggers pre-save default
+                tags: cleanedTags,
+            },
+            { new: true, runValidators: true }
         );
         res.status(200).json({
             status: "success",
