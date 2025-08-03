@@ -52,7 +52,7 @@ app.post(
             );
         }
 
-        const { username, email, password } = req.body;
+        const { name, username, email, password, role, imageUrl } = req.body;
 
         const emailExists = await User.findOne({ email });
         if (emailExists) {
@@ -64,7 +64,14 @@ app.post(
             return next(new AppError("Username already in use", 400));
         }
 
-        const user = new User({ username, email, password });
+        const user = new User({
+            name,
+            username,
+            email,
+            password,
+            role,
+            imageUrl: imageUrl?.trim() || undefined, // fallback triggers pre-save default
+        });
         await user.save();
 
         // Create JWT token
