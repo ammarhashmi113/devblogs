@@ -17,7 +17,7 @@ const blogSchema = new Schema(
                 },
                 message: "A blog must have at least one tag.",
             },
-            set: (tags) => tags.map((tag) => tag.trim().toLowerCase()),
+            set: (tags) => tags.map((tag) => tag.trim().toLowerCase()), // cleaning and normalizing tags
         },
         comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
         likes: [{ type: Schema.Types.ObjectId, ref: "Like" }],

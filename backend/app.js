@@ -225,19 +225,6 @@ app.put(
         const { id } = req.params;
         const { title, body, imageUrl, tags } = req.body;
 
-        // Blog title and body must be provided (again) while updating, for now
-        if (!title || !body) {
-            return next(new AppError("Blog title and body are required.", 400));
-        }
-
-        // Validate if blog tags (tags should be an array and there should be atleast one tag in the array)
-        if (!tags || !Array.isArray(tags) || tags.length === 0) {
-            return next(new AppError("Please provide at least one tag.", 400));
-        }
-
-        // Cleaning and normalizing the tags
-        const cleanedTags = tags.map((tag) => tag.trim().toLowerCase());
-
         // Making sure only blog author can edit or delete it.
         if (!blog.author.equals(req.user._id)) {
             return next(
@@ -248,16 +235,26 @@ app.put(
             );
         }
 
-        const updatedBlog = await Blog.findByIdAndUpdate(
-            id,
-            {
-                title,
-                body,
-                imageUrl: imageUrl?.trim() || undefined, // fallback triggers pre-save default
-                tags: cleanedTags,
-            },
-            { new: true, runValidators: true }
-        );
+        // Creating empty update object which will be populated
+        const updateData = {};
+
+        if (title) updateData.title = title.trim(); // using trim() in route because mongoose schema trim() doesnt run while using th function findByIdAndUpdate()
+        if (body) updateData.body = body.trim();
+        if (imageUrl !== undefined) updateData.imageUrl = imageUrl.trim();
+
+        if (tags !== undefined) {
+            if (!Array.isArray(tags) || tags.length === 0) {
+                return next(
+                    new AppError("Please provide at least one tag.", 400)
+                );
+            }
+            updateData.tags = tags; // Schema will clean tags using `set` method
+        }
+
+        const updatedBlog = await Blog.findByIdAndUpdate(id, blog, {
+            new: true,
+            runValidators: true,
+        });
         res.status(200).json({
             status: "success",
             data: { blog: updatedBlog },
