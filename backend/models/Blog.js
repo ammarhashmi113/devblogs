@@ -21,6 +21,7 @@ const blogSchema = new Schema(
                 "mongodb",
                 "html",
                 "css",
+                "ui/ux",
                 "tailwind",
                 "devops",
                 "testing",

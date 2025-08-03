@@ -151,13 +151,9 @@ export default function BlogsPage() {
                                         blog.createdAt
                                     ).toLocaleDateString()}
                                 </span>
-                                {blog.tags.map((tag) => {
-                                    return (
-                                        <div className="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">
-                                            {tag}
-                                        </div>
-                                    );
-                                })}
+                                <div className="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">
+                                    {blog.category}
+                                </div>
                             </div>
                             <div className="group relative grow">
                                 <h3 className="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600">
@@ -171,20 +167,20 @@ export default function BlogsPage() {
                                 </p>
                             </div>
                             <div className="relative mt-8 flex items-center gap-x-4 justify-self-end">
-                                {/* <img
+                                <img
                                     alt=""
-                                    src={post.author.imageUrl}
+                                    src={blog.author.imageUrl}
                                     className="size-10 rounded-full bg-gray-50"
-                                /> */}
+                                />
                                 <div className="text-sm/6">
                                     <p className="font-semibold text-gray-900">
                                         <a href="#">
                                             <span className="absolute inset-0" />
-                                            {blog.author.username}
+                                            {blog.author.name}
                                         </a>
                                     </p>
                                     <p className="text-gray-600">
-                                        {"post.author.role"}
+                                        {blog.author.role}
                                     </p>
                                 </div>
                             </div>
