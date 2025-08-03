@@ -21,7 +21,20 @@ const userSchema = new Schema(
             trim: true,
             match: [/.+@.+\..+/, "Invalid email format."],
         },
-        password: { type: String, required: true, minlength: 8 },
+        password: {
+            type: String,
+            required: [true, "Password is required"],
+            minlength: [8, "Password must be at least 8 characters"],
+            validate: {
+                validator: function (v) {
+                    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(
+                        v
+                    );
+                },
+                message:
+                    "Password must have at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character",
+            },
+        },
         role: {
             type: String,
             required: true,
