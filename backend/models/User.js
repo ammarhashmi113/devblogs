@@ -6,6 +6,7 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
     {
+        name: { type: String, required: true, minLength: 5, trim: true },
         username: {
             type: String,
             required: true,
@@ -17,17 +18,50 @@ const userSchema = new Schema(
             type: String,
             required: true,
             unique: true,
+            trim: true,
             match: [/.+@.+\..+/, "Invalid email format."],
         },
         password: { type: String, required: true, minlength: 8 },
+        role: {
+            type: String,
+            required: true,
+            minlength: 2,
+            maxlength: 50,
+            trim: true,
+        },
+        about: {
+            type: String,
+            maxlength: 500,
+        },
+        imageUrl: {
+            type: String,
+            trim: true,
+        },
     },
     { timestamps: true }
 );
 
-// Using mongoose pre-save middleware to hash the entered password before saving
+// Using mongoose pre-save middleware to clean some values, add default imageUrl, and hash the entered password before saving
 userSchema.pre("save", async function (next) {
-    if (!this.isModified("password")) return next(); // password didnt change before saving
-    this.password = await bcrypt.hash(this.password, 10);
+    // Trim + clean spaces
+    if (this.name) {
+        this.name = this.name.trim().replace(/\s+/g, " ");
+    }
+    if (this.role) {
+        this.role = this.role.trim().replace(/\s+/g, " ");
+    }
+
+    // Set default imageUrl if not provided
+    if (!this.imageUrl && this.name) {
+        const encodedName = encodeURIComponent(this.name); // encodeURIComponent(this.name) avoids breaking images if someone has weird characters in their name
+        this.imageUrl = `https://ui-avatars.com/api/?name=${encodedName}&background=random`;
+    }
+
+    // Only hash if password was changed or is new
+    if (this.isModified("password")) {
+        this.password = await bcrypt.hash(this.password, 10);
+    }
+
     next();
 });
 
