@@ -9,6 +9,30 @@ const blogSchema = new Schema(
         title: { type: String, required: true, trim: true, minlength: 5 },
         body: { type: String, required: true, trim: true, minlength: 10 },
         imageUrl: { type: String, trim: true }, // image is optional, will fallback to default image if not provided
+        category: {
+            type: String,
+            required: true,
+            enum: [
+                "javascript",
+                "react",
+                "nextjs",
+                "nodejs",
+                "express",
+                "mongodb",
+                "html",
+                "css",
+                "tailwind",
+                "devops",
+                "testing",
+                "ai",
+                "ml",
+                "data-science",
+                "career",
+                "other",
+            ],
+            lowercase: true,
+            trim: true,
+        },
         tags: {
             type: [String],
             validate: {

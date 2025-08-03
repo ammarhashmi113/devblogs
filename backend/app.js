@@ -178,7 +178,7 @@ app.post(
     isAuthenticated,
     catchAsync(async (req, res, next) => {
         const author = req.user._id; // logged in user is attached to request object in isAuthenticated middleware
-        const { title, body, imageUrl, tags } = req.body; // from request sent from client
+        const { title, body, imageUrl, category, tags } = req.body; // from request sent from client
 
         // Checking if a blog with same title exists
         const blogWithSameNameFound = await Blog.findOne({
@@ -204,6 +204,7 @@ app.post(
             title,
             body,
             imageUrl: imageUrl?.trim() || undefined, // fallback triggers pre-save default
+            category,
             tags: cleanedTags,
         });
         await blog.save();
@@ -223,7 +224,7 @@ app.put(
     catchAsync(async (req, res, next) => {
         const blog = req.blog; // Blog is attached with request body in "blodWithIdExists" middleware
         const { id } = req.params;
-        const { title, body, imageUrl, tags } = req.body;
+        const { title, body, imageUrl, category, tags } = req.body;
 
         // Making sure only blog author can edit or delete it.
         if (!blog.author.equals(req.user._id)) {
@@ -241,6 +242,7 @@ app.put(
         if (title) updateData.title = title.trim(); // using trim() in route because mongoose schema trim() doesnt run while using th function findByIdAndUpdate()
         if (body) updateData.body = body.trim();
         if (imageUrl !== undefined) updateData.imageUrl = imageUrl.trim();
+        if (category) updateData.category = category.trim();
 
         if (tags !== undefined) {
             if (!Array.isArray(tags) || tags.length === 0) {
