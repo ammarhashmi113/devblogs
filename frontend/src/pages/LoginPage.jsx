@@ -1,13 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 function LoginPage() {
     const apiUrl = import.meta.env.VITE_API_BASE_URL;
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -20,10 +20,11 @@ function LoginPage() {
                 password,
             });
             console.log(res.data.token);
+            toast.sucess("Login success");
             // localStorage.setItem("token", res.data.token);
             navigate("/");
         } catch (err) {
-            setError(err.response.data.error);
+            toast.error(err.response.data.error);
             console.error("Login failed", err);
         } finally {
             setLoading(false);
@@ -110,7 +111,7 @@ function LoginPage() {
                     <div>
                         <button
                             type="submit"
-                            className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                            className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer"
                         >
                             Sign in
                         </button>
