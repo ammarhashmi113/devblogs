@@ -156,11 +156,17 @@ app.get(
     catchAsync(async (req, res, next) => {
         const { id } = req.params;
         const blog = await Blog.findById(id)
-            .populate("author", "username")
+            .populate({
+                path: "author",
+                select: "username name role about imageUrl",
+            })
             .populate({
                 path: "comments",
                 select: "author body createdAt",
-                populate: { path: "author", select: "username" },
+                populate: {
+                    path: "author",
+                    select: "username name role imageurl",
+                },
             })
             .populate({
                 path: "likes",
