@@ -13,6 +13,7 @@ function BlogDetailsPage() {
     async function fetchBlog() {
         try {
             const res = await axios.get(`${apiUrl}/posts/${id}`);
+            console.log(res.data.data.blog);
             setBlog(res.data.data.blog);
         } catch (err) {
             console.error("Error fetching blog:", err);

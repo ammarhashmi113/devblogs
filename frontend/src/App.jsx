@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import BlogsPage from "./pages/BlogsPage";
-import BlogDetailsPage from "./pages/BlogDetailsPage";
+import BlogDetailsPage1 from "./pages/BlogDetailsPage";
+import BlogDetailsPage from "./pages/BlogDetailsPage/BlogDetailsPage";
 import LoginPage from "./pages/LoginPage";
 import { Toaster } from "react-hot-toast";
 

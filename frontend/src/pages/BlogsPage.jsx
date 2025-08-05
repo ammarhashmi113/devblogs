@@ -1,7 +1,5 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { format } from "date-fns";
 import BlogCard from "../components/BlogCard";
 
 const apiUrl = import.meta.env.VITE_API_BASE_URL;
