@@ -139,12 +139,16 @@ app.get("/", (req, res) => {
 // GET all blogposts
 app.get(
     "/api/posts",
-    catchAsync(async (req, res, next) => {
+    catchAsync(async (req, res) => {
         console.log("GET BLOGPOSTS REQUEST WAS MADE");
-        const allBlogs = await Blog.find({}).populate({
-            path: "author",
-            select: "username name role about imageUrl",
-        });
+        const limit = parseInt(req.query.limit) || 0; // 0 = no limit
+        const allBlogs = await Blog.find({})
+            .sort({ createdAt: -1 })
+            .limit(limit)
+            .populate({
+                path: "author",
+                select: "username name role about imageUrl",
+            });
         res.status(200).json({ status: "success", data: { blogs: allBlogs } });
     })
 );
