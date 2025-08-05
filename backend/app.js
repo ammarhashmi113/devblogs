@@ -295,6 +295,25 @@ app.delete(
     })
 );
 
+// Get all comments of a particular blogpost
+app.get(
+    "/api/posts/:id/comments",
+    blogWithIdExists,
+    catchAsync(async (req, res, next) => {
+        const { id } = req.params;
+        const blogComments = await Comment.find({ blog: id })
+            .select("author body createdAt")
+            .populate({
+                path: "author",
+                select: "username name role imageUrl",
+            });
+        res.status(200).json({
+            status: "success",
+            data: { comments: blogComments },
+        });
+    })
+);
+
 // Add a comment to a blogpost
 app.post(
     "/api/posts/:id/comments",
