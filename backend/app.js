@@ -165,14 +165,6 @@ app.get(
                 select: "username name role about imageUrl",
             })
             .populate({
-                path: "comments",
-                select: "author body createdAt",
-                populate: {
-                    path: "author",
-                    select: "username name role imageurl",
-                },
-            })
-            .populate({
                 path: "likes",
                 select: "author createdAt",
                 populate: { path: "author", select: "username" },
