@@ -1,83 +1,71 @@
 import { Heart, MessageCircle, User, Calendar } from "lucide-react";
-
 import { Link } from "react-router-dom";
+import { format } from "date-fns";
 
 function BlogCard({ blog }) {
-    const {
-        _id,
-        title,
-        body,
-        author,
-        tags,
-        imageUrl,
-        createdAt,
-        likes,
-        comments,
-    } = blog;
+    const { _id, title, body, author, tags, imageUrl, createdAt, category } =
+        blog;
 
     return (
-        <div className="bg-white shadow-md rounded-xl overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow duration-300">
-            {/* Image */}
-            <img
-                src={imageUrl}
-                alt={title}
-                className="w-full h-40 object-cover"
-            />
+        <article className="flex flex-col justify-between bg-white dark:bg-gray-900 p-6 max-w-xl mx-auto transition-all">
+            {/* Blog Image with dark overlay */}
+            <div className="relative">
+                <img
+                    src={imageUrl}
+                    alt={`Banner for ${title}`}
+                    className="w-full h-48 object-cover rounded-xl mb-5"
+                />
+                <div className="absolute top-0 left-0 w-full h-48 rounded-xl bg-black/10 dark:bg-black/30" />
+            </div>
 
-            <div className="p-6">
-                {/* Title */}
-                <h2 className="text-xl md:text-2xl font-semibold mb-2 text-gray-900 leading-snug line-clamp-2">
-                    {title}
-                </h2>
+            {/* Date + Category */}
+            <div className="flex items-center gap-x-3 text-xs text-gray-500 dark:text-gray-400 mb-2">
+                <span>{format(new Date(createdAt), "PPP")}</span>
+                <span className="inline-block bg-blue-200 dark:bg-blue-800 text-blue-800 dark:text-blue-200 font-medium px-3 py-1 rounded-full capitalize">
+                    {category}
+                </span>
+            </div>
+
+            {/* Title + Snippet */}
+            <div className="flex flex-col grow">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 mb-2 line-clamp-2">
+                    <Link to={`/blogs/${_id}`}>{title}</Link>
+                </h3>
+
+                <p className="text-sm text-gray-700 dark:text-gray-300 line-clamp-3 mb-4">
+                    {body.split("\n")[0].slice(0, 200)}...
+                </p>
 
                 {/* Tags */}
-                <div className="flex flex-wrap gap-2 mb-3">
-                    {tags.map((tag, idx) => (
+                <div className="flex flex-wrap gap-2 mt-auto">
+                    {tags?.slice(0, 3).map((tag) => (
                         <span
-                            key={idx}
-                            className="bg-blue-100 text-blue-700 text-xs font-medium px-2.5 py-1 rounded-full"
+                            key={tag}
+                            className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs px-2 py-0.5 rounded-full"
                         >
                             #{tag}
                         </span>
                     ))}
                 </div>
+            </div>
 
-                {/* Meta */}
-                <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-4">
-                    <div className="flex items-center gap-1">
-                        <User className="w-4 h-4" />
-                        <span>{author.username}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                        <Calendar className="w-4 h-4" />
-                        <span>{new Date(createdAt).toLocaleDateString()}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                        <Heart className="w-4 h-4 text-red-500" />
-                        <span>{likes.length}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                        <MessageCircle className="w-4 h-4 text-blue-500" />
-                        <span>{comments.length}</span>
-                    </div>
-                </div>
-
-                {/* Body Preview */}
-                <p className="text-gray-700 mb-4 leading-relaxed line-clamp-3">
-                    {body}
-                </p>
-
-                {/* Read more */}
-                <div className="text-right">
-                    <Link
-                        to={`/blogs/${_id}`}
-                        className="inline-block px-4 py-2 text-sm font-medium text-blue-600 border border-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition-colors duration-200"
-                    >
-                        Read More →
-                    </Link>
+            {/* Author Info */}
+            <div className="flex items-center gap-x-3 mt-6 pt-4 border-t border-gray-100 dark:border-gray-700">
+                <img
+                    src={author.imageUrl || "/default-avatar.png"}
+                    alt={author.name}
+                    className="w-10 h-10 rounded-full object-cover border border-gray-300 dark:border-gray-700"
+                />
+                <div>
+                    <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                        {author.name}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                        {author.role}
+                    </p>
                 </div>
             </div>
-        </div>
+        </article>
     );
 }
 
