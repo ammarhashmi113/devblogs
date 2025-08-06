@@ -131,6 +131,19 @@ app.post(
     })
 );
 
+// send logged in user data with the "me" route
+app.get(
+    "/api/me",
+    isAuthenticated,
+    catchAsync(async (req, res, next) => {
+        const { _id, name, username, email, role, imageUrl, createdAt } =
+            req.user; // skipping sensitive/irrelevant user data
+        res.status(200).json({
+            user: { _id, name, username, email, role, imageUrl, createdAt },
+        });
+    })
+);
+
 // -----App Routes-----
 app.get("/", (req, res) => {
     res.send("Hello Devs");
