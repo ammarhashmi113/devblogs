@@ -1,5 +1,5 @@
 // "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
     Menu,
     X,
@@ -13,6 +13,7 @@ import {
     CircleUser,
 } from "lucide-react";
 import { useUser } from "../contexts/userContext";
+import { useClickOutside } from "../hooks/useClickOutside";
 
 const navLinks = [
     {
@@ -28,6 +29,9 @@ const navLinks = [
 ];
 
 export default function BlogNavbar() {
+    const userDropdownRef = useRef(null);
+    const mobileDropdownRef = useRef(null);
+
     const { user, setUser, userLoading } = useUser();
     const [mobileOpen, setMobileOpen] = useState(false);
     const [userDropdownOpen, setUserDropdownOpen] = useState(false);
@@ -51,6 +55,12 @@ export default function BlogNavbar() {
         setDarkMode(!darkMode);
         document.documentElement.classList.toggle("dark", !darkMode);
     }
+
+    // Close the dropdown when a click is detected outside it
+    useClickOutside(userDropdownRef, () => setUserDropdownOpen(false));
+
+    // Close the mobile menu when a touchstart is detected outside it
+    useClickOutside(mobileDropdownRef, () => setMobileOpen(false));
 
     return (
         <header className="bg-white dark:bg-zinc-900 text-gray-800 dark:text-gray-100 shadow-sm sticky top-0 z-50 transition-colors">
@@ -102,7 +112,10 @@ export default function BlogNavbar() {
                             </button>
 
                             {userDropdownOpen && (
-                                <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-zinc-800 shadow-md rounded-xl py-2 z-50">
+                                <div
+                                    ref={userDropdownRef}
+                                    className="absolute right-0 mt-2 w-40 bg-white dark:bg-zinc-800 shadow-md rounded-xl py-2 z-50"
+                                >
                                     {user ? (
                                         <>
                                             <a
@@ -157,7 +170,10 @@ export default function BlogNavbar() {
 
             {/* Mobile menu */}
             {mobileOpen && (
-                <div className="lg:hidden bg-white dark:bg-zinc-900 border-t border-gray-200 dark:border-zinc-700">
+                <div
+                    ref={mobileDropdownRef}
+                    className="lg:hidden bg-white dark:bg-zinc-900 border-t border-gray-200 dark:border-zinc-700"
+                >
                     <div className="p-4 flex justify-between items-center">
                         <span className="text-lg font-semibold text-indigo-600 dark:text-indigo-400">
                             Menu
