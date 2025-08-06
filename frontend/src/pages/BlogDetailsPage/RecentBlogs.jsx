@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { format } from "date-fns";
 
-const apiUrl = import.meta.env.VITE_API_BASE_URL;
+import api from "../../utils/axiosConfig";
 
 function RecentBlogs() {
     const [recentBlogs, setRecentBlogs] = useState({});
@@ -10,7 +9,7 @@ function RecentBlogs() {
 
     async function fetchRecentBlogs() {
         try {
-            const res = await axios.get(`${apiUrl}/posts?limit=5`);
+            const res = await api.get("/posts?limit=5");
             setRecentBlogs(res.data.data.blogs);
         } catch (err) {
             console.error("Error fetching recent blogs:", err);

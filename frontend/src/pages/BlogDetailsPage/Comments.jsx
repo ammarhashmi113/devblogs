@@ -1,9 +1,8 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
 import { MessageSquare } from "lucide-react";
 import { format } from "date-fns";
 
-const apiUrl = import.meta.env.VITE_API_BASE_URL;
+import api from "../../utils/axiosConfig";
 
 function Comments({ id }) {
     const [comments, setComments] = useState([]);
@@ -11,7 +10,7 @@ function Comments({ id }) {
 
     async function fetchBlogComments() {
         try {
-            const res = await axios.get(`${apiUrl}/posts/${id}/comments`);
+            const res = await api.get(`/posts/${id}/comments`);
             setComments(res.data.data.comments);
         } catch (err) {
             console.error("Error fetching blog comments:", err);

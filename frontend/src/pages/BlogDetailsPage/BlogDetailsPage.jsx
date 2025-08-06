@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { useParams } from "react-router-dom";
 import { UserRound, Clock, MessageSquare } from "lucide-react";
+
+import api from "../../utils/axiosConfig";
 
 import AuthorCard from "./AuthorCard";
 import RecentBlogPosts from "./RecentBlogs";
@@ -19,7 +20,7 @@ function BlogDetailsPage() {
 
     async function fetchBlog() {
         try {
-            const res = await axios.get(`${apiUrl}/posts/${id}`);
+            const res = await api.get(`/posts/${id}`);
             setBlog(res.data.data.blog);
         } catch (err) {
             console.error("Error fetching blog:", err);
