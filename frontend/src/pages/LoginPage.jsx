@@ -1,7 +1,8 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+
+import api from "../utils/axiosConfig";
 
 function LoginPage() {
     const apiUrl = import.meta.env.VITE_API_BASE_URL;
@@ -15,11 +16,10 @@ function LoginPage() {
         setLoading(true);
         console.log(e);
         try {
-            const res = await axios.post(`${apiUrl}/login`, {
+            const res = await api.post("/login", {
                 email,
                 password,
             });
-            console.log(res.data.token);
             toast.success("Login success");
             localStorage.setItem("token", res.data.token);
             navigate("/");
