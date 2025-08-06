@@ -1,5 +1,6 @@
 // "use client";
 import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import {
     Menu,
     X,
@@ -11,6 +12,7 @@ import {
     Sun,
     LogIn,
     CircleUser,
+    LogOut,
 } from "lucide-react";
 import { useUser } from "../contexts/userContext";
 import { useClickOutside } from "../hooks/useClickOutside";
@@ -29,6 +31,7 @@ const navLinks = [
 ];
 
 export default function BlogNavbar() {
+    const navigate = useNavigate();
     const userDropdownRef = useRef(null);
     const mobileDropdownRef = useRef(null);
 
@@ -49,6 +52,7 @@ export default function BlogNavbar() {
         localStorage.removeItem("token");
         setUser(null);
         setUserDropdownOpen(false);
+        navigate("/");
     }
 
     function toggleDark() {
@@ -116,7 +120,7 @@ export default function BlogNavbar() {
                                     ref={userDropdownRef}
                                     className="absolute right-0 mt-2 w-40 bg-white dark:bg-zinc-800 shadow-md rounded-xl py-2 z-50"
                                 >
-                                    {user ? (
+                                    {!userLoading && user ? (
                                         <>
                                             <a
                                                 href="/profile"
