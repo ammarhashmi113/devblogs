@@ -21,7 +21,7 @@ function LoginPage() {
             });
             console.log(res.data.token);
             toast.success("Login success");
-            // localStorage.setItem("token", res.data.token);
+            localStorage.setItem("token", res.data.token);
             navigate("/");
         } catch (err) {
             toast.error(err.response.data.error);
