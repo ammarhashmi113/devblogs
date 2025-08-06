@@ -118,20 +118,20 @@ export default function BlogNavbar() {
                             {userDropdownOpen && (
                                 <div
                                     ref={userDropdownRef}
-                                    className="absolute right-0 mt-2 w-40 bg-white dark:bg-zinc-800 shadow-md rounded-xl py-2 z-50"
+                                    className="absolute right-0 mt-2 w-45 bg-white dark:bg-zinc-800 shadow-md rounded-xl p-2 z-50"
                                 >
                                     {!userLoading && user ? (
                                         <>
                                             <a
                                                 href="/profile"
-                                                className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-zinc-700"
+                                                className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-zinc-700 rounded-xl"
                                             >
                                                 <CircleUser className="inline size-4 mr-2" />
                                                 Profile
                                             </a>
                                             <button
                                                 onClick={handleLogout}
-                                                className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-zinc-700"
+                                                className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-zinc-700 cursor-pointer rounded-xl"
                                             >
                                                 <LogOut className="inline size-4 mr-2" />
                                                 Logout
@@ -141,14 +141,14 @@ export default function BlogNavbar() {
                                         <>
                                             <a
                                                 href="/login"
-                                                className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-zinc-700"
+                                                className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-zinc-700 rounded-xl"
                                             >
                                                 <LogIn className="inline size-4 mr-2" />
                                                 Sign in
                                             </a>
                                             <a
                                                 href="/register"
-                                                className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-zinc-700"
+                                                className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-zinc-700 rounded-xl"
                                             >
                                                 <CircleUser className="inline size-4 mr-2" />
                                                 Create account
