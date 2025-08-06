@@ -5,6 +5,8 @@ import { Toaster } from "react-hot-toast";
 import api from "./utils/axiosConfig";
 import { UserContext } from "./contexts/userContext";
 
+import Navbar from "./components/Navbar";
+
 import BlogsPage from "./pages/BlogsPage";
 import BlogDetailsPage from "./pages/BlogDetailsPage/BlogDetailsPage";
 import LoginPage from "./pages/LoginPage";
@@ -39,6 +41,7 @@ function App() {
             <Toaster />
             <BrowserRouter>
                 <UserContext.Provider value={{ user, setUser, userLoading }}>
+                    <Navbar />
                     <Routes>
                         <Route path="/" element={<BlogsPage />} />
                         <Route
