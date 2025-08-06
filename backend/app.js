@@ -123,9 +123,13 @@ app.post(
             status: "success",
             token, // Send the JWT token to the client
             user: {
-                id: user._id,
+                _id: user._id,
+                name: user.name,
                 username: user.username,
                 email: user.email,
+                role: user.role,
+                imageUrl: user.imageUrl,
+                createdAt: user.createdAt,
             },
         });
     })

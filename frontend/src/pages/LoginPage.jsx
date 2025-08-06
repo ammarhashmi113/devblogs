@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import api from "../utils/axiosConfig";
+import { useUser } from "../contexts/userContext";
 
 function LoginPage() {
-    const apiUrl = import.meta.env.VITE_API_BASE_URL;
+    const { setUser } = useUser();
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
@@ -14,7 +16,6 @@ function LoginPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        console.log(e);
         try {
             const res = await api.post("/login", {
                 email,
@@ -22,6 +23,7 @@ function LoginPage() {
             });
             toast.success("Login success");
             localStorage.setItem("token", res.data.token);
+            setUser(res.data.user); // will trigger navbar's rerender
             navigate("/");
         } catch (err) {
             toast.error(err.response.data.error);
@@ -109,7 +111,7 @@ function LoginPage() {
                             type="submit"
                             className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer"
                         >
-                            Sign in
+                            {loading ? "Signing in..." : "Sign in"}
                         </button>
                     </div>
                 </form>
