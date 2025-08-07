@@ -3,29 +3,30 @@
 import { useEffect } from "react";
 
 /**
- * This hook detects if user clicks outside a given element.
- *
- * @param {React.RefObject} ref - the element to watch for outside clicks
- * @param {Function} handler - function to run when outside click happens
+ * Detects click outside the given element (and ignores the exceptionRef if provided)
+ * @param {React.RefObject} ref - the main element to watch
+ * @param {Function} handler - function to run when clicked outside
+ * @param {React.RefObject} exceptionRef - optional ref to ignore (like toggle button)
  */
-export function useClickOutside(ref, handler) {
+export function useClickOutside(ref, handler, exceptionRef = null) {
     useEffect(() => {
-        // This function checks if the click was outside the element
         function handleClickOutside(event) {
-            // if ref exists AND click is NOT inside the element
-            if (ref.current && !ref.current.contains(event.target)) {
-                handler(); // run the provided function (usually setOpen(false))
+            // If click is outside both the target element and the exceptionRef (if any)
+            if (
+                ref.current &&
+                !ref.current.contains(event.target) &&
+                (!exceptionRef || !exceptionRef.current.contains(event.target))
+            ) {
+                handler();
             }
         }
 
-        // Listen to both mouse and touch events (for mobile support)
         document.addEventListener("mousedown", handleClickOutside);
         document.addEventListener("touchstart", handleClickOutside);
 
-        // Clean up when component unmounts or rerenders
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
             document.removeEventListener("touchstart", handleClickOutside);
         };
-    }, [ref, handler]); // re-run effect if ref or handler changes
+    }, [ref, handler, exceptionRef]);
 }

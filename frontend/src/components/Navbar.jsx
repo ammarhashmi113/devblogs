@@ -34,6 +34,7 @@ export default function BlogNavbar() {
     const navigate = useNavigate();
     const userDropdownRef = useRef(null);
     const mobileDropdownRef = useRef(null);
+    const toggleBtnRef = useRef(null);
 
     const { user, setUser, userLoading } = useUser();
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -64,7 +65,11 @@ export default function BlogNavbar() {
     useClickOutside(userDropdownRef, () => setUserDropdownOpen(false));
 
     // Close the mobile menu when a touchstart is detected outside it
-    useClickOutside(mobileDropdownRef, () => setMobileOpen(false));
+    useClickOutside(
+        mobileDropdownRef,
+        () => setMobileOpen(false),
+        toggleBtnRef
+    ); // Ignore toggle button clicks to avoid this bug: Click on toggle → dropdown closes (outside click), then reopens due to toggle logic
 
     return (
         <header className="bg-white dark:bg-zinc-900 text-gray-800 dark:text-gray-100 shadow-sm sticky top-0 z-50 transition-colors">
@@ -75,6 +80,7 @@ export default function BlogNavbar() {
                         type="button"
                         onClick={() => toggleMobileOpen()}
                         className="lg:hidden text-gray-600 dark:text-gray-300"
+                        ref={toggleBtnRef}
                     >
                         <Menu className="size-6" />
                     </button>
