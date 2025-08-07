@@ -1,5 +1,5 @@
 // "use client";
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
     Menu,
@@ -78,7 +78,7 @@ export default function BlogNavbar() {
                     {/* Mobile menu button */}
                     <button
                         type="button"
-                        onClick={() => toggleMobileOpen()}
+                        onClick={toggleMobileOpen}
                         className="lg:hidden text-gray-600 dark:text-gray-300"
                         ref={toggleBtnRef}
                     >
@@ -87,7 +87,7 @@ export default function BlogNavbar() {
 
                     {/* Logo */}
                     <a
-                        href="#"
+                        href="/"
                         className="text-xl font-semibold text-indigo-600 dark:text-indigo-400"
                     >
                         DevBlogs
@@ -112,6 +112,7 @@ export default function BlogNavbar() {
                         <button className="hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer">
                             <Search className="size-5" />
                         </button>
+
                         {/* USER DROPDOWN */}
                         <div className="relative">
                             <button
@@ -124,7 +125,7 @@ export default function BlogNavbar() {
                             {userDropdownOpen && (
                                 <div
                                     ref={userDropdownRef}
-                                    className="absolute right-0 mt-2 w-45 bg-white dark:bg-zinc-800 shadow-md rounded-xl p-2 z-50"
+                                    className="absolute right-0 mt-2 w-45 bg-white dark:bg-zinc-800 shadow-md rounded-xl p-2 z-50 transition-colors duration-300"
                                 >
                                     {!userLoading && user ? (
                                         <>
@@ -164,6 +165,7 @@ export default function BlogNavbar() {
                                 </div>
                             )}
                         </div>
+
                         <button
                             onClick={toggleDark}
                             className="hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer"
@@ -182,36 +184,38 @@ export default function BlogNavbar() {
             {mobileOpen && (
                 <div
                     ref={mobileDropdownRef}
-                    className="lg:hidden bg-white dark:bg-zinc-900 border-t border-gray-200 dark:border-zinc-700"
+                    className="lg:hidden bg-white dark:bg-zinc-900 border-t border-gray-200 dark:border-zinc-700 transition-colors duration-300"
                 >
                     <div className="p-4 flex justify-between items-center">
                         <span className="text-lg font-semibold text-indigo-600 dark:text-indigo-400">
                             Menu
                         </span>
                     </div>
+
                     <div className="px-4 pb-4 space-y-3">
                         {navLinks.map((link) => (
                             <a
                                 key={link.name}
                                 href={link.href}
-                                className="block text-base font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                                className="block text-base font-medium text-gray-800 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
                             >
                                 {link.icon}
                                 {link.name}
                             </a>
                         ))}
+
                         <div className="pt-4 border-t border-gray-200 dark:border-zinc-700 space-y-2">
                             <a
-                                href="#"
-                                className="flex items-center gap-2 text-sm font-medium block"
+                                href="/login"
+                                className="flex items-center gap-2 text-sm font-medium text-gray-800 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400"
                             >
                                 <LogIn className="size-4" />
                                 Sign in
                             </a>
 
                             <a
-                                href="#"
-                                className="flex items-center gap-2 text-sm font-medium block"
+                                href="/register"
+                                className="flex items-center gap-2 text-sm font-medium text-gray-800 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400"
                             >
                                 <CircleUser className="size-4" />
                                 Create account
@@ -219,7 +223,7 @@ export default function BlogNavbar() {
 
                             <button
                                 onClick={toggleDark}
-                                className="flex items-center gap-2 text-sm font-medium"
+                                className="flex items-center gap-2 text-sm font-medium text-gray-800 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400"
                             >
                                 {darkMode ? (
                                     <Sun className="size-4" />
