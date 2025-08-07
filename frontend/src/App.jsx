@@ -10,6 +10,7 @@ import Navbar from "./components/Navbar";
 import BlogsPage from "./pages/BlogsPage";
 import BlogDetailsPage from "./pages/BlogDetailsPage/BlogDetailsPage";
 import LoginPage from "./pages/LoginPage";
+import ProfileForm from "./pages/ProfileForm";
 
 function App() {
     const [user, setUser] = useState(null);
@@ -49,6 +50,14 @@ function App() {
                             element={<BlogDetailsPage />}
                         />
                         <Route path="/login" element={<LoginPage />} />
+                        <Route
+                            path="/register"
+                            element={<ProfileForm mode="register" />}
+                        />
+                        <Route
+                            path="/profile/edit"
+                            element={<ProfileForm mode="edit" />}
+                        />
                     </Routes>
                 </UserContext.Provider>
             </BrowserRouter>
