@@ -52,7 +52,8 @@ app.post(
             );
         }
 
-        const { name, username, email, password, role, imageUrl } = req.body;
+        const { name, username, email, password, role, imageUrl, about } =
+            req.body;
 
         const emailExists = await User.findOne({ email });
         if (emailExists) {
@@ -70,6 +71,7 @@ app.post(
             email,
             password,
             role,
+            about,
             imageUrl: imageUrl?.trim() || undefined, // fallback triggers pre-save default
         });
         await user.save();
@@ -82,6 +84,15 @@ app.post(
         res.status(201).json({
             status: "success",
             token, // Send the JWT token to the client
+            user: {
+                _id: user._id,
+                name: user.name,
+                username: user.username,
+                email: user.email,
+                role: user.role,
+                imageUrl: user.imageUrl,
+                createdAt: user.createdAt,
+            },
         });
     })
 );
@@ -140,10 +151,62 @@ app.get(
     "/api/me",
     isAuthenticated,
     catchAsync(async (req, res, next) => {
-        const { _id, name, username, email, role, imageUrl, createdAt } =
+        const { _id, name, username, email, role, about, imageUrl, createdAt } =
             req.user; // skipping sensitive/irrelevant user data
         res.status(200).json({
-            user: { _id, name, username, email, role, imageUrl, createdAt },
+            user: {
+                _id,
+                name,
+                username,
+                email,
+                role,
+                about,
+                imageUrl,
+                createdAt,
+            },
+        });
+    })
+);
+
+// update a user
+app.put(
+    "/api/me",
+    isAuthenticated,
+    catchAsync(async (req, res, next) => {
+        const { name, username, about, imageUrl, role } = req.body;
+        const user = req.user;
+
+        // Username uniqueness check (only if username is changing)
+        if (username && username !== user.username) {
+            const usernameExists = await User.findOne({ username });
+            if (usernameExists) {
+                return next(new AppError("Username already taken", 400));
+            }
+            user.username = username;
+        }
+
+        // Update allowed fields
+        if (name) user.name = name;
+        if (about) user.about = about;
+        if (imageUrl) user.imageUrl = imageUrl;
+        if (role) user.role = role;
+
+        await user.save();
+
+        const { _id, email, createdAt } = user;
+
+        res.status(200).json({
+            status: "success",
+            user: {
+                _id,
+                name: user.name,
+                username: user.username,
+                email, // included for frontend display, not updatable
+                role: user.role,
+                about: user.about,
+                imageUrl: user.imageUrl,
+                createdAt,
+            },
         });
     })
 );
