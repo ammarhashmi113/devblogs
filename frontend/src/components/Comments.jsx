@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { MessageSquare } from "lucide-react";
 import { format } from "date-fns";
 
-import api from "../../utils/axiosConfig";
+import api from "../utils/axiosConfig";
 
 function Comments({ id }) {
     const [comments, setComments] = useState([]);

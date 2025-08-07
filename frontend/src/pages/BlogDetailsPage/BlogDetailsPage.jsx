@@ -4,17 +4,14 @@ import { UserRound, Clock, MessageSquare } from "lucide-react";
 
 import api from "../../utils/axiosConfig";
 
-import AuthorCard from "./AuthorCard";
+import AuthorCard from "../../components/AuthorCard";
 import RecentBlogPosts from "./RecentBlogs";
-import TagsList from "./TagsList";
-import Comments from "./Comments";
-
-const apiUrl = import.meta.env.VITE_API_BASE_URL;
+import TagsList from "../../components/TagsList";
+import Comments from "../../components/Comments";
 
 function BlogDetailsPage() {
     const { id } = useParams(); // blospost id
     const [blog, setBlog] = useState({});
-    const [recentPosts, setRecentPosts] = useState([]);
 
     const [loading, setLoading] = useState(true);
 
