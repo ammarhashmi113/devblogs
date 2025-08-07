@@ -57,9 +57,25 @@ export default function BlogNavbar() {
     }
 
     function toggleDark() {
-        setDarkMode(!darkMode);
-        document.documentElement.classList.toggle("dark", !darkMode);
+        const newMode = !darkMode;
+        setDarkMode(newMode);
+
+        if (newMode) {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem("theme", "dark");
+        } else {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem("theme", "light");
+        }
     }
+
+    useEffect(() => {
+        const savedTheme = localStorage.getItem("theme");
+        const isDark = savedTheme === "dark";
+
+        setDarkMode(isDark);
+        document.documentElement.classList.toggle("dark", isDark);
+    }, []);
 
     // Close the dropdown when a click is detected outside it
     useClickOutside(userDropdownRef, () => setUserDropdownOpen(false));
