@@ -10,7 +10,8 @@ import Navbar from "./components/Navbar";
 import BlogsPage from "./pages/BlogsPage";
 import BlogDetailsPage from "./pages/BlogDetailsPage/BlogDetailsPage";
 import LoginPage from "./pages/LoginPage";
-import ProfileForm from "./pages/ProfileForm";
+import ProfileForm from "./pages/RegisterAndProfileEdit";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
     const [user, setUser] = useState(null);
@@ -58,6 +59,7 @@ function App() {
                             path="/profile/edit"
                             element={<ProfileForm mode="edit" />}
                         />
+                        <Route path="/profile" element={<ProfilePage />} />
                     </Routes>
                 </UserContext.Provider>
             </BrowserRouter>
