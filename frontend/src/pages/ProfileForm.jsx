@@ -14,18 +14,15 @@ function ProfileForm({ mode = "edit" }) {
         e.preventDefault();
         const form = e.target;
         const formData = new FormData(form);
-
         const data = Object.fromEntries(formData.entries());
 
         try {
             if (isEdit) {
-                console.log("EDITED USER", data);
                 const res = await api.put("/me", data);
                 toast.success("Profile updated!");
                 setUser(res.data.user);
                 navigate("/");
             } else {
-                console.log("REGISTER USER", data);
                 const res = await api.post("/register", data);
                 localStorage.setItem("token", res.data.token);
                 setUser(res.data.user);
@@ -41,114 +38,131 @@ function ProfileForm({ mode = "edit" }) {
 
     if (userLoading) return <div>Loading...</div>;
 
-    console.log(user);
-
     return (
-        <form
-            onSubmit={handleSubmit}
-            className="max-w-4xl mx-auto p-6 sm:p-10 bg-white shadow-md rounded-xl"
-        >
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">
-                {isEdit ? "Edit Profile" : "Register"}
-            </h2>
-
-            {/* Username */}
-            <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                    Username
-                </label>
-                <input
-                    name="username"
-                    defaultValue={isEdit ? user?.username : ""}
-                    className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+        <div className="flex min-h-screen flex-col justify-center px-6 py-12 lg:px-8 bg-white dark:bg-gray-900 transition-colors duration-300">
+            <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+                <img
+                    alt="Devblogs"
+                    src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
+                    className="mx-auto h-10 w-auto"
                 />
+                <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900 dark:text-white">
+                    {isEdit ? "Edit Profile" : "Create your account"}
+                </h2>
             </div>
 
-            {/* Email */}
-            <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                    Email
-                </label>
-                <input
-                    name="email"
-                    type="email"
-                    defaultValue={isEdit ? user?.email : ""}
-                    className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                />
+            <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-xl">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    {/* Username */}
+                    <div>
+                        <label className="block text-sm/6 font-medium text-gray-900 dark:text-gray-100">
+                            Username
+                        </label>
+                        <input
+                            name="username"
+                            defaultValue={isEdit ? user?.username : ""}
+                            placeholder="cool_dev123"
+                            required
+                            className="block w-full rounded-md bg-white dark:bg-gray-800 px-3 py-1.5 text-base text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-700 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                        />
+                    </div>
+
+                    {/* Email */}
+                    <div>
+                        <label className="block text-sm/6 font-medium text-gray-900 dark:text-gray-100">
+                            Email address
+                        </label>
+                        <input
+                            name="email"
+                            type="email"
+                            defaultValue={isEdit ? user?.email : ""}
+                            placeholder="someone@example.com"
+                            required
+                            className="block w-full rounded-md bg-white dark:bg-gray-800 px-3 py-1.5 text-base text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-700 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                        />
+                    </div>
+
+                    {/* Password (only for register) */}
+                    {!isEdit && (
+                        <div>
+                            <label className="block text-sm/6 font-medium text-gray-900 dark:text-gray-100">
+                                Password
+                            </label>
+                            <input
+                                name="password"
+                                type="password"
+                                placeholder="••••••••"
+                                required
+                                className="block w-full rounded-md bg-white dark:bg-gray-800 px-3 py-1.5 text-base text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-700 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                            />
+                        </div>
+                    )}
+
+                    {/* Name */}
+                    <div>
+                        <label className="block text-sm/6 font-medium text-gray-900 dark:text-gray-100">
+                            Name
+                        </label>
+                        <input
+                            name="name"
+                            defaultValue={isEdit ? user?.name : ""}
+                            placeholder="John Doe"
+                            className="block w-full rounded-md bg-white dark:bg-gray-800 px-3 py-1.5 text-base text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-700 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                        />
+                    </div>
+
+                    {/* Role */}
+                    <div>
+                        <label className="block text-sm/6 font-medium text-gray-900 dark:text-gray-100">
+                            Role
+                        </label>
+                        <input
+                            name="role"
+                            defaultValue={isEdit ? user?.role : ""}
+                            placeholder="Developer"
+                            className="block w-full rounded-md bg-white dark:bg-gray-800 px-3 py-1.5 text-base text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-700 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                        />
+                    </div>
+
+                    {/* About */}
+                    <div>
+                        <label className="block text-sm/6 font-medium text-gray-900 dark:text-gray-100">
+                            About
+                        </label>
+                        <textarea
+                            name="about"
+                            rows="3"
+                            defaultValue={isEdit ? user?.about || "" : ""}
+                            placeholder="Write something about yourself..."
+                            className="block w-full rounded-md bg-white dark:bg-gray-800 px-3 py-1.5 text-base text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-700 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                        />
+                    </div>
+
+                    {/* Image URL */}
+                    <div>
+                        <label className="block text-sm/6 font-medium text-gray-900 dark:text-gray-100">
+                            Profile Image Url
+                        </label>
+                        <input
+                            name="imageUrl"
+                            defaultValue={isEdit ? user?.imageUrl : ""}
+                            placeholder="https://example.com/avatar.png"
+                            className="block w-full rounded-md bg-white dark:bg-gray-800 px-3 py-1.5 text-base text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-700 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                        />
+                    </div>
+
+                    {/* Submit */}
+                    <div>
+                        <button
+                            type="submit"
+                            className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer"
+                        >
+                            {isEdit ? "Save Changes" : "Create Account"}
+                        </button>
+                    </div>
+                </form>
             </div>
-
-            {/* Password (only in register) */}
-            {!isEdit && (
-                <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700">
-                        Password
-                    </label>
-                    <input
-                        name="password"
-                        type="password"
-                        className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                    />
-                </div>
-            )}
-
-            {/* Name */}
-            <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                    Name
-                </label>
-                <input
-                    name="name"
-                    defaultValue={isEdit ? user?.name : ""}
-                    className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                />
-            </div>
-
-            {/* Role */}
-            <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                    Role
-                </label>
-                <input
-                    name="role"
-                    defaultValue={isEdit ? user?.role : ""}
-                    className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                />
-            </div>
-
-            {/* About */}
-            <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700">
-                    About
-                </label>
-                <textarea
-                    name="about"
-                    rows="3"
-                    defaultValue={isEdit ? user?.about || "" : ""}
-                    placeholder="Write something about yourself..."
-                    className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                />
-            </div>
-
-            {/* Profile Image Url */}
-            <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                    Image Url
-                </label>
-                <input
-                    name="imageUrl"
-                    defaultValue={isEdit ? user?.imageUrl : ""}
-                    className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                />
-            </div>
-
-            {/* Submit */}
-            <button
-                type="submit"
-                className="w-full bg-indigo-600 text-white rounded-md py-2 text-sm font-semibold hover:bg-indigo-500 transition"
-            >
-                {isEdit ? "Save Changes" : "Create Account"}
-            </button>
-        </form>
+        </div>
     );
 }
 
