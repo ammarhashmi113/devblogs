@@ -6,7 +6,6 @@ import BlogForm from "../components/BlogForm";
 function EditBlogPage() {
     const { id } = useParams();
     const navigate = useNavigate();
-
     const [initialValues, setInitialValues] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -39,12 +38,11 @@ function EditBlogPage() {
     const handleDelete = async () => {
         if (!window.confirm("Are you sure you want to delete this blog?"))
             return;
-
         setLoading(true);
         setError("");
         try {
             await api.delete(`/posts/${id}`);
-            navigate("/"); // redirect to homepage after deletion
+            navigate("/");
         } catch (err) {
             setError(err.response?.data?.message || "Something went wrong");
         } finally {
@@ -53,31 +51,37 @@ function EditBlogPage() {
     };
 
     return (
-        <div className="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow">
-            <h1 className="text-2xl font-bold mb-6">Edit Blog</h1>
-            {error && <p className="text-red-500 mb-4">{error}</p>}
+        <div className="flex min-h-screen flex-col justify-center px-6 py-12 lg:px-8 bg-white dark:bg-gray-900 transition-colors duration-300">
+            <div className="sm:mx-auto sm:w-full sm:max-w-2xl">
+                <h1 className="text-center text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+                    Edit Blog
+                </h1>
+            </div>
 
-            {initialValues ? (
-                <>
-                    <BlogForm
-                        initialValues={initialValues}
-                        onSubmit={handleUpdate}
-                        loading={loading}
-                        error={error}
-                    />
-
-                    {/* Delete Button */}
-                    <button
-                        onClick={handleDelete}
-                        disabled={loading}
-                        className="mt-6 w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 disabled:opacity-50"
-                    >
-                        {loading ? "Processing..." : "Delete Blog"}
-                    </button>
-                </>
-            ) : (
-                <p>Loading blog...</p>
-            )}
+            <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-2xl">
+                {error && <p className="text-red-500 mb-4">{error}</p>}
+                {initialValues ? (
+                    <>
+                        <BlogForm
+                            initialValues={initialValues}
+                            onSubmit={handleUpdate}
+                            loading={loading}
+                            error={error}
+                        />
+                        <button
+                            onClick={handleDelete}
+                            disabled={loading}
+                            className="mt-6 w-full rounded-md bg-red-600 px-3 py-2 text-white hover:bg-red-700 disabled:opacity-50"
+                        >
+                            {loading ? "Processing..." : "Delete Blog"}
+                        </button>
+                    </>
+                ) : (
+                    <p className="text-gray-600 dark:text-gray-400">
+                        Loading blog...
+                    </p>
+                )}
+            </div>
         </div>
     );
 }

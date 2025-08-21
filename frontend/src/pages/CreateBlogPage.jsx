@@ -13,7 +13,7 @@ function CreateBlogPage() {
         setError("");
         try {
             await api.post("/posts", blogData);
-            navigate("/"); // redirect after create
+            navigate("/");
         } catch (err) {
             setError(err.response?.data?.message || "Something went wrong");
         } finally {
@@ -22,9 +22,20 @@ function CreateBlogPage() {
     };
 
     return (
-        <div className="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow">
-            <h1 className="text-2xl font-bold mb-6">Create Blog</h1>
-            <BlogForm onSubmit={handleCreate} loading={loading} error={error} />
+        <div className="flex min-h-screen flex-col justify-center px-6 py-12 lg:px-8 bg-white dark:bg-gray-900 transition-colors duration-300">
+            <div className="sm:mx-auto sm:w-full sm:max-w-2xl">
+                <h1 className="text-center text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+                    Create Blog
+                </h1>
+            </div>
+
+            <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-2xl">
+                <BlogForm
+                    onSubmit={handleCreate}
+                    loading={loading}
+                    error={error}
+                />
+            </div>
         </div>
     );
 }
