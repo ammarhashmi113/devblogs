@@ -1,18 +1,21 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { UserRound, Clock, MessageSquare } from "lucide-react";
 
 import api from "../../utils/axiosConfig";
-
 import AuthorCard from "../../components/AuthorCard";
 import RecentBlogPosts from "./RecentBlogs";
 import TagsList from "../../components/TagsList";
 import Comments from "../../components/Comments";
+import { useUser } from "../../contexts/userContext";
 
 function BlogDetailsPage() {
-    const { id } = useParams(); // blogpost id
-    const [blog, setBlog] = useState({});
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const { user } = useUser();
+    const [blog, setBlog] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
 
     async function fetchBlog() {
         try {
@@ -20,6 +23,7 @@ function BlogDetailsPage() {
             setBlog(res.data.data.blog);
         } catch (err) {
             console.error("Error fetching blog:", err);
+            setError("Failed to fetch blog");
         } finally {
             setLoading(false);
         }
@@ -27,7 +31,19 @@ function BlogDetailsPage() {
 
     useEffect(() => {
         fetchBlog();
-    }, []);
+    }, [id]);
+
+    const handleDelete = async () => {
+        if (!window.confirm("Are you sure you want to delete this blog?"))
+            return;
+        try {
+            await api.delete(`/posts/${id}`);
+            navigate("/");
+        } catch (err) {
+            console.error("Delete failed:", err);
+            setError(err.response?.data?.message || "Failed to delete blog");
+        }
+    };
 
     if (loading) {
         return (
@@ -37,15 +53,17 @@ function BlogDetailsPage() {
         );
     }
 
-    if (!blog)
+    if (!blog) {
         return (
             <p className="text-center mt-8 text-red-500 dark:text-red-400">
                 Blog not found
             </p>
         );
+    }
 
     const { _id, title, body, imageUrl, createdAt, author, tags, comments } =
         blog;
+    const isAuthor = user?._id === author?._id;
 
     return (
         <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
@@ -83,6 +101,24 @@ function BlogDetailsPage() {
                         <div className="prose prose-sm sm:prose-base lg:prose-lg dark:prose-invert max-w-none whitespace-pre-line">
                             {body}
                         </div>
+
+                        {/* ✅ Only author sees Edit/Delete */}
+                        {isAuthor && (
+                            <div className="flex gap-4 mt-6">
+                                <Link
+                                    to={`/blogs/${id}/edit`}
+                                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                                >
+                                    Edit
+                                </Link>
+                                <button
+                                    onClick={handleDelete}
+                                    className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        )}
 
                         {/* COMMENT SECTION */}
                         <Comments id={_id} />

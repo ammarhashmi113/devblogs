@@ -13,6 +13,7 @@ import LoginPage from "./pages/LoginPage";
 import ProfileForm from "./pages/RegisterAndProfileEdit";
 import ProfilePage from "./pages/ProfilePage";
 import CreateBlogPage from "./pages/CreateBlogPage";
+import EditBlogPage from "./pages/EditBlogPage";
 
 function App() {
     const [user, setUser] = useState(null);
@@ -47,6 +48,10 @@ function App() {
                     <Navbar />
                     <Routes>
                         <Route path="/" element={<BlogsPage />} />
+                        <Route
+                            path="/blogs/:id/edit"
+                            element={<EditBlogPage />}
+                        />
                         <Route
                             path="/blogs/:id"
                             element={<BlogDetailsPage />}
