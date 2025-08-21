@@ -526,7 +526,7 @@ app.delete(
     isAuthenticated,
     blogWithIdExists,
     catchAsync(async (req, res, next) => {
-        const blog = req.body;
+        const blog = req.blog;
 
         // First Check if current logged-in user has a like made for this particular blog
         const like = await Like.findOne({ author: req.user, blog: blog._id });

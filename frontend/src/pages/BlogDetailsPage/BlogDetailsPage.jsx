@@ -2,25 +2,30 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { UserRound, Clock, MessageSquare } from "lucide-react";
 
+import { useUser } from "../../contexts/userContext";
 import api from "../../utils/axiosConfig";
+
 import AuthorCard from "../../components/AuthorCard";
 import RecentBlogPosts from "./RecentBlogs";
 import TagsList from "../../components/TagsList";
 import Comments from "../../components/Comments";
-import { useUser } from "../../contexts/userContext";
+import LikeButton from "../../components/LikeButton";
 
 function BlogDetailsPage() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { user } = useUser();
     const [blog, setBlog] = useState(null);
+    const [blogLikedByUser, setBlogLikedByUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
     async function fetchBlog() {
         try {
             const res = await api.get(`/posts/${id}`);
+            console.log(res.data.data);
             setBlog(res.data.data.blog);
+            setBlogLikedByUser(res.data.data.likedByUser);
         } catch (err) {
             console.error("Error fetching blog:", err);
             setError("Failed to fetch blog");
@@ -80,6 +85,13 @@ function BlogDetailsPage() {
                         <h1 className="text-3xl font-bold leading-snug text-gray-900 dark:text-white">
                             {title}
                         </h1>
+
+                        <LikeButton
+                            targetId={_id}
+                            type="posts"
+                            initialLiked={blogLikedByUser}
+                            initialCount={blog.likes.length}
+                        />
 
                         <div className="flex items-center text-sm text-gray-600 dark:text-gray-400 space-x-6">
                             <div className="flex items-center gap-2">
