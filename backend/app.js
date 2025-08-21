@@ -11,6 +11,7 @@ require("dotenv").config();
 const catchAsync = require("./utils/catchAsync");
 const AppError = require("./utils/AppError");
 const isAuthenticated = require("./middlewares/isAuthenticated");
+const authOptional = require("./middlewares/authOptional");
 const blogWithIdExists = require("./middlewares/blogWithIdExists");
 
 // Connect with DB and serve API
@@ -236,6 +237,7 @@ app.get(
 // GET a single blogpost from id
 app.get(
     "/api/posts/:id",
+    authOptional,
     blogWithIdExists,
     catchAsync(async (req, res, next) => {
         const { id } = req.params;
@@ -253,7 +255,16 @@ app.get(
         if (!blog) {
             return next(new AppError("Blog not found", 404));
         }
-        res.status(200).json({ status: "success", data: { blog } });
+
+        // Did current user like this blog?
+        const likedByUser = blog.likes.some((like) =>
+            like.author.equals(req.user?._id)
+        );
+
+        res.status(200).json({
+            status: "success",
+            data: { blog, likedByUser },
+        });
     })
 );
 
