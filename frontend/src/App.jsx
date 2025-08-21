@@ -5,6 +5,9 @@ import { Toaster } from "react-hot-toast";
 import api from "./utils/axiosConfig";
 import { UserContext } from "./contexts/userContext";
 
+import ProtectedRoute from "./routes/ProtectedRoute";
+import GuestRoute from "./routes/GuestRoute";
+
 import Navbar from "./components/Navbar";
 
 import BlogsPage from "./pages/BlogsPage";
@@ -47,26 +50,64 @@ function App() {
                 <UserContext.Provider value={{ user, setUser, userLoading }}>
                     <Navbar />
                     <Routes>
+                        {/* open routes */}
                         <Route path="/" element={<BlogsPage />} />
-                        <Route
-                            path="/blogs/:id/edit"
-                            element={<EditBlogPage />}
-                        />
                         <Route
                             path="/blogs/:id"
                             element={<BlogDetailsPage />}
                         />
-                        <Route path="/login" element={<LoginPage />} />
+
+                        {/* protected routes */}
                         <Route
-                            path="/register"
-                            element={<ProfileForm mode="register" />}
+                            path="/blogs/:id/edit"
+                            element={
+                                <ProtectedRoute>
+                                    <EditBlogPage />
+                                </ProtectedRoute>
+                            }
                         />
                         <Route
                             path="/profile/edit"
-                            element={<ProfileForm mode="edit" />}
+                            element={
+                                <ProtectedRoute>
+                                    <ProfileForm mode="edit" />
+                                </ProtectedRoute>
+                            }
                         />
-                        <Route path="/profile" element={<ProfilePage />} />
-                        <Route path="/blogs/new" element={<CreateBlogPage />} />
+                        <Route
+                            path="/profile"
+                            element={
+                                <ProtectedRoute>
+                                    <ProfilePage />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/blogs/new"
+                            element={
+                                <ProtectedRoute>
+                                    <CreateBlogPage />
+                                </ProtectedRoute>
+                            }
+                        />
+
+                        {/* guest-only routes */}
+                        <Route
+                            path="/login"
+                            element={
+                                <GuestRoute>
+                                    <LoginPage />
+                                </GuestRoute>
+                            }
+                        />
+                        <Route
+                            path="/register"
+                            element={
+                                <GuestRoute>
+                                    <ProfileForm mode="register" />
+                                </GuestRoute>
+                            }
+                        />
                     </Routes>
                 </UserContext.Provider>
             </BrowserRouter>
