@@ -338,7 +338,7 @@ app.put(
             updateData.tags = tags; // Schema will clean tags using `set` method
         }
 
-        const updatedBlog = await Blog.findByIdAndUpdate(id, blog, {
+        const updatedBlog = await Blog.findByIdAndUpdate(id, updateData, {
             new: true,
             runValidators: true,
         });
