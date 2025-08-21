@@ -12,6 +12,7 @@ import BlogDetailsPage from "./pages/BlogDetailsPage/BlogDetailsPage";
 import LoginPage from "./pages/LoginPage";
 import ProfileForm from "./pages/RegisterAndProfileEdit";
 import ProfilePage from "./pages/ProfilePage";
+import CreateBlogPage from "./pages/CreateBlogPage";
 
 function App() {
     const [user, setUser] = useState(null);
@@ -60,6 +61,7 @@ function App() {
                             element={<ProfileForm mode="edit" />}
                         />
                         <Route path="/profile" element={<ProfilePage />} />
+                        <Route path="/blogs/new" element={<CreateBlogPage />} />
                     </Routes>
                 </UserContext.Provider>
             </BrowserRouter>
