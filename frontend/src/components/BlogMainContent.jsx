@@ -2,8 +2,7 @@ import { Link } from "react-router-dom";
 
 import { useUser } from "../contexts/userContext";
 import LikeButton from "../components/LikeButton";
-import { UserRound, Clock, MessageSquare } from "lucide-react";
-
+import { UserRound, Clock, MessageSquare, Pencil, Trash } from "lucide-react";
 function BlogMainContent({ blog, blogLikedByUser, handleDelete, loading }) {
     const { user, userLoading } = useUser();
 
@@ -53,15 +52,15 @@ function BlogMainContent({ blog, blogLikedByUser, handleDelete, loading }) {
                 <div className="flex gap-4 mt-6">
                     <Link
                         to={`/blogs/${blog._id}/edit`}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                        className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg bg-indigo-50 text-indigo-600 hover:bg-indigo-100 dark:bg-indigo-900/40 dark:text-indigo-400 dark:hover:bg-indigo-900/60 transition"
                     >
-                        Edit
+                        <Pencil size={16} /> Edit
                     </Link>
                     <button
                         onClick={handleDelete}
-                        className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+                        className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/40 dark:text-red-400 dark:hover:bg-red-900/60 transition cursor-pointer"
                     >
-                        Delete
+                        <Trash size={16} /> Delete
                     </button>
                 </div>
             )}
