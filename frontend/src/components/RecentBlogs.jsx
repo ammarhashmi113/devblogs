@@ -43,11 +43,11 @@ function RecentBlogs() {
                             <img
                                 src={blog.imageUrl}
                                 alt={blog.title}
-                                className="w-32 h-auto rounded object-cover flex-shrink-0"
+                                className="w-32 h-21 rounded object-cover flex-shrink-0"
                             />
 
                             <div className="flex flex-col justify-between">
-                                <h4 className="text-lg font-semibold text-gray-900 dark:text-white line-clamp-3">
+                                <h4 className="text-lg font-semibold text-gray-900 dark:text-white line-clamp-2">
                                     {blog.title}
                                 </h4>
                                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">

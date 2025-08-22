@@ -4,8 +4,8 @@ const BlogItemSkeleton = () => (
     <li>
         <a className="flex items-start gap-4 p-4 transition-colors">
             <SVGSkeleton className="rounded object-cover flex-shrink-0 w-32 h-21" />
-            <div className="flex flex-col justify-between w-[100%]">
-                <h4 className="line-clamp-3">
+            <div className="flex flex-col justify-between w-[100%] mt-1">
+                <h4 className="line-clamp-2">
                     <Skeleton className="w-[90%] max-w-full" />
                 </h4>
                 <p className="mt-1">
@@ -21,7 +21,7 @@ const RecentBlogsSkeleton = () => (
         <h3 className="pl-4 border-l-4 border-blue-500 h-[28px]">
             <Skeleton className="w-[96px] max-w-full" />
         </h3>
-        <ul className="space-y-5 mb-[19px]">
+        <ul className="space-y-4">
             {Array.from({ length: 5 }).map((_, i) => (
                 <BlogItemSkeleton key={i} />
             ))}
