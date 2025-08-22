@@ -3,7 +3,7 @@ import { Skeleton, SVGSkeleton } from "./Skeleton";
 const BlogMainContentSkeleton = () => (
     <>
         <div className="lg:col-span-2 space-y-8">
-            <SVGSkeleton className="rounded-lg w-full h-auto" />
+            <SVGSkeleton className="aspect-[16/9] w-full rounded-lg mb-12" />
             <h1 className="leading-snug">
                 <Skeleton className="w-[432px] max-w-full" />
             </h1>
