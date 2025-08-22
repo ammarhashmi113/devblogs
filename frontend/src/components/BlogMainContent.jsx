@@ -65,14 +65,17 @@ function BlogMainContent({ blog, blogLikedByUser, handleDelete, loading }) {
                     </button>
                 </div>
             )}
-            <div className="flex items-center justify-end gap-4 mt-6 mx-6">
-                <LikeButton
-                    targetId={blog._id}
-                    type="posts"
-                    initialLiked={blogLikedByUser}
-                    initialCount={blog.likes.length}
-                />
-            </div>
+
+            {!isAuthor && (
+                <div className="flex items-center justify-end gap-4 mt-6 mx-6">
+                    <LikeButton
+                        targetId={blog._id}
+                        type="posts"
+                        initialLiked={blogLikedByUser}
+                        initialCount={blog.likes.length}
+                    />
+                </div>
+            )}
         </div>
     );
 }
