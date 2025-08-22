@@ -1,6 +1,6 @@
 import { Skeleton, SVGSkeleton } from "./Skeleton";
 
-const LoadingSkeleton = () => (
+const BlogMainContentSkeleton = () => (
     <>
         <div className="lg:col-span-2 space-y-8">
             <SVGSkeleton className="rounded-lg w-full h-auto" />
@@ -34,4 +34,4 @@ const LoadingSkeleton = () => (
     </>
 );
 
-export default LoadingSkeleton;
+export default BlogMainContentSkeleton;
