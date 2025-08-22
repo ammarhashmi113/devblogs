@@ -11,11 +11,13 @@ function BlogMainContent({ blog, blogLikedByUser, handleDelete, loading }) {
     return (
         <div className="lg:col-span-2 space-y-8">
             {/* BLOG MAIN CONTENT */}
-            <img
-                src={blog.imageUrl}
-                alt={blog.title}
-                className="w-full h-auto rounded-lg"
-            />
+            <div className="aspect-[16/9] w-full rounded-lg overflow-hidden">
+                <img
+                    src={blog.imageUrl}
+                    alt={blog.title}
+                    className="w-full h-full object-cover"
+                />
+            </div>
 
             <h1 className="text-3xl font-bold leading-snug text-gray-900 dark:text-white">
                 {blog.title}
