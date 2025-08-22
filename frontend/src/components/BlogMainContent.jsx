@@ -1,0 +1,69 @@
+import { Link } from "react-router-dom";
+
+import { useUser } from "../contexts/userContext";
+import LikeButton from "../components/LikeButton";
+import { UserRound, Clock, MessageSquare } from "lucide-react";
+
+function BlogMainContent({ blog, blogLikedByUser, handleDelete }) {
+    const { user } = useUser();
+    const isAuthor = user?._id === blog.author?._id;
+    return (
+        <>
+            {/* BLOG MAIN CONTENT */}
+            <img
+                src={blog.imageUrl}
+                alt={blog.title}
+                className="w-full h-auto rounded-lg"
+            />
+
+            <h1 className="text-3xl font-bold leading-snug text-gray-900 dark:text-white">
+                {blog.title}
+            </h1>
+
+            <div className="flex items-center text-sm text-gray-600 dark:text-gray-400 space-x-6">
+                <div className="flex items-center gap-2">
+                    <UserRound className="w-4 h-4" />
+                    <span>{blog.author.name}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                    <Clock className="w-4 h-4" />
+                    <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                    <MessageSquare className="w-4 h-4" />
+                    <span>{blog.comments.length} Comments</span>
+                </div>
+                <LikeButton
+                    targetId={blog._id}
+                    type="posts"
+                    initialLiked={blogLikedByUser}
+                    initialCount={blog.likes.length}
+                />
+            </div>
+
+            <div className="prose prose-sm sm:prose-base lg:prose-lg dark:prose-invert max-w-none whitespace-pre-line">
+                {blog.body}
+            </div>
+
+            {/* ✅ Only author sees Edit/Delete */}
+            {isAuthor && (
+                <div className="flex gap-4 mt-6">
+                    <Link
+                        to={`/blogs/${blog._id}/edit`}
+                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                    >
+                        Edit
+                    </Link>
+                    <button
+                        onClick={handleDelete}
+                        className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+                    >
+                        Delete
+                    </button>
+                </div>
+            )}
+        </>
+    );
+}
+
+export default BlogMainContent;

@@ -38,7 +38,7 @@ function LikeButton({
     return (
         <button
             onClick={handleLike}
-            className={`flex items-center gap-1 transition ${
+            className={`flex items-center gap-2 transition cursor-pointer ${
                 liked
                     ? "text-pink-600"
                     : "text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
@@ -47,7 +47,9 @@ function LikeButton({
             <Heart
                 className={`w-5 h-5 ${liked ? "fill-pink-600" : "fill-none"}`}
             />
-            <span className="text-sm">{count}</span>
+            <span>
+                {count} Like{count > 1 && "s"}
+            </span>
         </button>
     );
 }
