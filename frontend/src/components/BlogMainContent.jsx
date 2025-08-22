@@ -8,7 +8,7 @@ function BlogMainContent({ blog, blogLikedByUser, handleDelete }) {
     const { user } = useUser();
     const isAuthor = user?._id === blog.author?._id;
     return (
-        <>
+        <div className="lg:col-span-2 space-y-8">
             {/* BLOG MAIN CONTENT */}
             <img
                 src={blog.imageUrl}
@@ -20,25 +20,25 @@ function BlogMainContent({ blog, blogLikedByUser, handleDelete }) {
                 {blog.title}
             </h1>
 
-            <div className="flex items-center text-sm text-gray-600 dark:text-gray-400 space-x-6">
-                <div className="flex items-center gap-2">
-                    <UserRound className="w-4 h-4" />
-                    <span>{blog.author.name}</span>
+            <div className="flex items-center text-sm text-gray-600 dark:text-gray-400 space-x-4 sm:space-x-6">
+                <div className="flex items-center gap-1 sm:gap-2">
+                    <UserRound className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <span className="text-xs sm:text-sm">
+                        {blog.author.name}
+                    </span>
                 </div>
-                <div className="flex items-center gap-2">
-                    <Clock className="w-4 h-4" />
-                    <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
+                <div className="flex items-center gap-1 sm:gap-2">
+                    <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <span className="text-xs sm:text-sm">
+                        {new Date(blog.createdAt).toLocaleDateString()}
+                    </span>
                 </div>
-                <div className="flex items-center gap-2">
-                    <MessageSquare className="w-4 h-4" />
-                    <span>{blog.comments.length} Comments</span>
+                <div className="flex items-center gap-1 sm:gap-2">
+                    <MessageSquare className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <span className="text-xs sm:text-sm">
+                        {blog.comments.length} Comments
+                    </span>
                 </div>
-                <LikeButton
-                    targetId={blog._id}
-                    type="posts"
-                    initialLiked={blogLikedByUser}
-                    initialCount={blog.likes.length}
-                />
             </div>
 
             <div className="prose prose-sm sm:prose-base lg:prose-lg dark:prose-invert max-w-none whitespace-pre-line">
@@ -62,7 +62,15 @@ function BlogMainContent({ blog, blogLikedByUser, handleDelete }) {
                     </button>
                 </div>
             )}
-        </>
+            <div className="flex items-center justify-end gap-4 mt-6 mx-6">
+                <LikeButton
+                    targetId={blog._id}
+                    type="posts"
+                    initialLiked={blogLikedByUser}
+                    initialCount={blog.likes.length}
+                />
+            </div>
+        </div>
     );
 }
 
