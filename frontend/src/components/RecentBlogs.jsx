@@ -3,6 +3,8 @@ import { format } from "date-fns";
 
 import api from "../utils/axiosConfig";
 
+import RecentBlogsSkeleton from "../skeletons/RecentBlogsSkeleton";
+
 function RecentBlogs() {
     const [recentBlogs, setRecentBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -23,11 +25,7 @@ function RecentBlogs() {
     }, []);
 
     if (loading) {
-        return (
-            <p className="text-sm text-gray-700 dark:text-gray-300">
-                Recent Blogs are Loading...
-            </p>
-        );
+        return <RecentBlogsSkeleton />;
     }
 
     return (

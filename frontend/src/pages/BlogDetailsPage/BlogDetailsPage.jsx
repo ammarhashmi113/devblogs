@@ -11,6 +11,7 @@ import BlogMainContent from "../../components/BlogMainContent";
 
 import BlogMainContentSkeleton from "../../skeletons/BlogMainContentSkeleton";
 import AuthorCardSkeleton from "../../skeletons/AuthorCardSkeleton";
+import RecentBlogsSkeleton from "../../skeletons/RecentBlogsSkeleton";
 
 function BlogDetailsPage() {
     const { id } = useParams();
@@ -65,6 +66,7 @@ function BlogDetailsPage() {
                         {/* SIDEBAR */}
                         <aside className="space-y-8">
                             <AuthorCardSkeleton />
+                            <RecentBlogsSkeleton />
                             {/* <AuthorCard author={blog.author} />
                             <RecentBlogPosts />
                             <TagsList tags={blog.tags} /> */}
