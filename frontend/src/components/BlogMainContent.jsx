@@ -4,8 +4,9 @@ import { useUser } from "../contexts/userContext";
 import LikeButton from "../components/LikeButton";
 import { UserRound, Clock, MessageSquare } from "lucide-react";
 
-function BlogMainContent({ blog, blogLikedByUser, handleDelete }) {
-    const { user } = useUser();
+function BlogMainContent({ blog, blogLikedByUser, handleDelete, loading }) {
+    const { user, userLoading } = useUser();
+
     const isAuthor = user?._id === blog.author?._id;
     return (
         <div className="lg:col-span-2 space-y-8">

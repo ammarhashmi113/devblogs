@@ -9,6 +9,8 @@ import TagsList from "../../components/TagsList";
 import Comments from "../../components/Comments";
 import BlogMainContent from "../../components/BlogMainContent";
 
+import BlogMainContentSkeleton from "../../skeletons/BlogMainContentSkeleton";
+
 function BlogDetailsPage() {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -48,9 +50,26 @@ function BlogDetailsPage() {
 
     if (loading) {
         return (
-            <p className="text-center text-gray-700 dark:text-gray-300">
-                Blog is Loading...
-            </p>
+            <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+                <div className="container mx-auto px-4 py-10">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div className="lg:col-span-2 space-y-8">
+                            {/* BLOG MAIN CONTENT*/}
+                            <BlogMainContentSkeleton />
+
+                            {/* COMMENT SECTION */}
+                            {/* <Comments id={blog._id} /> */}
+                        </div>
+
+                        {/* SIDEBAR */}
+                        <aside className="space-y-8">
+                            {/* <AuthorCard author={blog.author} />
+                            <RecentBlogPosts />
+                            <TagsList tags={blog.tags} /> */}
+                        </aside>
+                    </div>
+                </div>
+            </div>
         );
     }
 
@@ -71,6 +90,7 @@ function BlogDetailsPage() {
                             blog={blog}
                             blogLikedByUser={blogLikedByUser}
                             handleDelete={handleDelete}
+                            loading={loading}
                         />
 
                         {/* COMMENT SECTION */}
