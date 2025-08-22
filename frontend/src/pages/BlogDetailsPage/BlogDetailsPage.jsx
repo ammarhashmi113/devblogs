@@ -6,7 +6,7 @@ import { useUser } from "../../contexts/userContext";
 import api from "../../utils/axiosConfig";
 
 import AuthorCard from "../../components/AuthorCard";
-import RecentBlogPosts from "./RecentBlogs";
+import RecentBlogPosts from "../../components/RecentBlogs";
 import TagsList from "../../components/TagsList";
 import Comments from "../../components/Comments";
 import LikeButton from "../../components/LikeButton";
@@ -23,7 +23,6 @@ function BlogDetailsPage() {
     async function fetchBlog() {
         try {
             const res = await api.get(`/posts/${id}`);
-            console.log(res.data.data);
             setBlog(res.data.data.blog);
             setBlogLikedByUser(res.data.data.likedByUser);
         } catch (err) {
@@ -74,8 +73,8 @@ function BlogDetailsPage() {
         <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
             <div className="container mx-auto px-4 py-10">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* MAIN CONTENT */}
                     <div className="lg:col-span-2 space-y-8">
+                        {/* MAIN CONTENT */}
                         <img
                             src={imageUrl}
                             alt={title}

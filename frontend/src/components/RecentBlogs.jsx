@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 
-import api from "../../utils/axiosConfig";
+import api from "../utils/axiosConfig";
 
 function RecentBlogs() {
     const [recentBlogs, setRecentBlogs] = useState([]);
