@@ -26,15 +26,15 @@ const BlogCardSkeleton = () => (
                         <Skeleton className="w-[232px] max-w-full" />
                     </a>
                 </h3>
-                <p className="line-clamp-3">
+                <div className="line-clamp-3">
                     <Skeleton className="w-[1512px] max-w-full" />
-                </p>
-                <p className="line-clamp-3">
+                </div>
+                <div className="line-clamp-3">
                     <Skeleton className="w-[1512px] max-w-full" />
-                </p>
-                <p className="line-clamp-3 mb-[5px]">
+                </div>
+                <div className="line-clamp-3 mb-[5px]">
                     <Skeleton className="w-[1512px] max-w-full" />
-                </p>
+                </div>
                 <div className="flex flex-wrap gap-2 mt-auto">
                     <span className="py-0.5">
                         <Skeleton className="w-[48px] max-w-full" />
@@ -50,12 +50,12 @@ const BlogCardSkeleton = () => (
             <div className="flex items-center gap-x-3 mt-[19px] pt-3 border-t border-gray-100 dark:border-gray-700">
                 <SVGSkeleton className="rounded-full object-cover border border-gray-300 dark:border-gray-700 w-10 h-10" />
                 <div>
-                    <p>
+                    <div>
                         <Skeleton className="w-[88px] max-w-full" />
-                    </p>
-                    <p>
+                    </div>
+                    <div>
                         <Skeleton className="w-[144px] max-w-full" />
-                    </p>
+                    </div>
                 </div>
             </div>
         </article>
