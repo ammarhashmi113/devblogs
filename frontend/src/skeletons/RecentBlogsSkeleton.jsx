@@ -8,9 +8,9 @@ const BlogItemSkeleton = () => (
                 <h4 className="line-clamp-2">
                     <Skeleton className="w-[90%] max-w-full" />
                 </h4>
-                <p className="mt-1">
+                <div className="mt-1">
                     <Skeleton className="w-[70%] max-w-full" />
-                </p>
+                </div>
             </div>
         </a>
     </li>

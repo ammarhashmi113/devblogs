@@ -7,9 +7,9 @@ const AuthorCardSkeleton = () => (
             <h4>
                 <Skeleton className="w-[88px] max-w-full mx-auto" />
             </h4>
-            <p>
+            <div>
                 <Skeleton className="w-[144px] max-w-full mx-auto" />
-            </p>
+            </div>
             <p className="mt-1"></p>
         </div>
     </>
