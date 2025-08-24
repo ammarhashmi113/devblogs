@@ -6,13 +6,13 @@ function ProfilePage() {
     const { user, userLoading } = useUser();
     const navigate = useNavigate();
 
-    if (userLoading) {
-        return (
-            <div className="flex items-center justify-center min-h-screen text-gray-500 dark:text-gray-400">
-                Loading profile...
-            </div>
-        );
-    }
+    // if (userLoading) {
+    //     return (
+    //         <div className="flex items-center justify-center min-h-screen text-gray-500 dark:text-gray-400">
+    //             Loading profile...
+    //         </div>
+    //     );
+    // }
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
