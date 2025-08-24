@@ -4,6 +4,8 @@ import api from "../utils/axiosConfig";
 
 import BlogCard from "../components/BlogCard";
 
+import BlogCardSkeleton from "../skeletons/BlogCardSkeleton";
+
 export default function BlogsPage() {
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -12,7 +14,6 @@ export default function BlogsPage() {
     async function fetchBlogs() {
         try {
             const res = await api.get("/posts");
-            console.log(res.data.data.blogs);
             setBlogs(res.data.data.blogs);
         } catch (err) {
             console.error("Error fetching blogs:", err);
@@ -25,8 +26,6 @@ export default function BlogsPage() {
     useEffect(() => {
         fetchBlogs();
     }, []);
-
-    if (loading) return <div>Blogs Loading</div>;
 
     return (
         <div className="bg-white dark:bg-gray-900 py-24 sm:py-32 transition-colors duration-300">
@@ -41,9 +40,14 @@ export default function BlogsPage() {
                 </div>
 
                 <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 dark:border-gray-700 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-                    {blogs.map((blog) => (
-                        <BlogCard blog={blog} key={blog._id} />
-                    ))}
+                    {loading &&
+                        Array.from({ length: 6 }).map((_, i) => (
+                            <BlogCardSkeleton key={i} />
+                        ))}
+                    {!loading &&
+                        blogs.map((blog) => (
+                            <BlogCard blog={blog} key={blog._id} />
+                        ))}
                 </div>
             </div>
         </div>
