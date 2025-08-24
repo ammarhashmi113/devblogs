@@ -27,8 +27,14 @@ function EditBlogPage() {
                 }
 
                 setInitialValues(blog);
-            } catch {
-                setError("Failed to load blog details.");
+            } catch (err) {
+                if (err.response?.status === 404) {
+                    setError("Blog not found.");
+                } else if (err.response?.status === 500) {
+                    setError("Server error. Please try again later.");
+                } else {
+                    setError("Something went wrong while fetching the blog.");
+                }
             }
         };
 
