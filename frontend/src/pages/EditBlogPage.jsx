@@ -30,6 +30,7 @@ function EditBlogPage() {
             } catch (err) {
                 if (err.response?.status === 404) {
                     setError("Blog not found.");
+                    navigate("/");
                 } else if (err.response?.status === 500) {
                     setError("Server error. Please try again later.");
                 } else {
