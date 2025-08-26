@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
+import { Home, ChevronRight } from "lucide-react";
 
 import api from "../../utils/axiosConfig";
 
@@ -55,6 +56,22 @@ function BlogDetailsPage() {
         return (
             <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
                 <div className="container mx-auto px-4 py-10">
+                    <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400 mb-6">
+                        {/* Home link */}
+                        <Link
+                            to="/"
+                            className="flex items-center gap-1 hover:text-blue-500 transition-colors"
+                        >
+                            <Home className="w-4 h-4" />
+                            <span>Blogs</span>
+                        </Link>
+
+                        {/* Separator */}
+                        <ChevronRight className="w-4 h-4" />
+
+                        {/* Current page Placeholder */}
+                        <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+                    </div>
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         <div className="lg:col-span-2 space-y-8">
                             {/* BLOG MAIN CONTENT*/}
@@ -87,6 +104,22 @@ function BlogDetailsPage() {
     return (
         <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
             <div className="container mx-auto px-4 py-10">
+                <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400 mb-6">
+                    {/* Home link */}
+                    <Link
+                        to="/"
+                        className="flex items-center gap-1 hover:text-blue-500 transition-colors"
+                    >
+                        <Home className="w-4 h-4" />
+                        <span>Blogs</span>
+                    </Link>
+
+                    {/* Separator */}
+                    <ChevronRight className="w-4 h-4" />
+
+                    {/* Current page (truncate if long) */}
+                    <span className="truncate max-w-[200px]">{blog.title}</span>
+                </div>
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div className="lg:col-span-2 space-y-8">
                         <BlogMainContent
