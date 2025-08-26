@@ -3,16 +3,8 @@ import { Calendar, Pencil, Mail } from "lucide-react";
 import { useUser } from "../contexts/userContext";
 
 function ProfilePage() {
-    const { user, userLoading } = useUser();
+    const { user } = useUser();
     const navigate = useNavigate();
-
-    // if (userLoading) {
-    //     return (
-    //         <div className="flex items-center justify-center min-h-screen text-gray-500 dark:text-gray-400">
-    //             Loading profile...
-    //         </div>
-    //     );
-    // }
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
