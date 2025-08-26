@@ -7,14 +7,14 @@ function ProfilePage() {
     const navigate = useNavigate();
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div className="min-h-screen bg-white dark:bg-gray-900">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
                 {/* Header */}
-                <div className="bg-white dark:bg-gray-800 shadow rounded-2xl p-6 sm:p-10 relative">
+                <div className="bg-gray-50 dark:bg-gray-800 shadow rounded-2xl p-6 sm:p-10 relative">
                     {/* Edit button */}
                     <button
                         onClick={() => navigate("/profile/edit")}
-                        className="absolute top-4 right-4 inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg bg-indigo-50 text-indigo-600 hover:bg-indigo-100 dark:bg-indigo-900/40 dark:text-indigo-400 dark:hover:bg-indigo-900/60 transition"
+                        className="absolute top-4 right-4 inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg bg-indigo-50 text-indigo-600 hover:bg-indigo-100 dark:bg-indigo-900/40 dark:text-indigo-400 dark:hover:bg-indigo-900/60 transition cursor-pointer"
                     >
                         <Pencil size={16} /> Edit
                     </button>

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useUser } from "../../contexts/userContext";
-
 import CategoryCombobox from "./CategoryCombobox";
 
 const CATEGORIES = [
@@ -36,11 +35,12 @@ function BlogFilters({ filters, setFilters }) {
               );
 
     return (
-        <>
-            <div className="mt-6 flex flex-wrap justify-center gap-4 items-center">
+        <div className="mt-6 flex flex-col items-center gap-4">
+            {/* Filters Row */}
+            <div className="flex flex-wrap justify-center gap-4 w-full max-w-xl">
                 {/* My Blogs Toggle */}
                 {user && (
-                    <label className="inline-flex relative items-center cursor-pointer">
+                    <label className="inline-flex items-center cursor-pointer">
                         <input
                             type="checkbox"
                             className="sr-only peer"
@@ -52,8 +52,8 @@ function BlogFilters({ filters, setFilters }) {
                                 }))
                             }
                         />
-                        <div className="w-12 h-6 bg-gray-200 rounded-full peer-checked:bg-blue-600 transition-all duration-300"></div>
-                        <span className="ml-3 text-gray-700 dark:text-gray-300 font-medium">
+                        <div className="w-12 h-6 bg-gray-200 dark:bg-gray-700 rounded-full peer-checked:bg-blue-600 transition-all duration-300" />
+                        <span className="ml-2 text-gray-700 dark:text-gray-300 font-medium">
                             My Blogs
                         </span>
                     </label>
@@ -83,13 +83,14 @@ function BlogFilters({ filters, setFilters }) {
                             setTagInput("");
                         }
                     }}
-                    className="rounded border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                    className="rounded-md bg-white dark:bg-gray-800 px-3 py-1.5 text-base text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-700 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                 />
             </div>
+
             {/* Active Filter Chips */}
             <div className="flex flex-wrap justify-center gap-2 mt-4">
                 {filters.category && (
-                    <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full flex items-center gap-1">
+                    <span className="bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
                         {filters.category}
                         <button
                             onClick={() =>
@@ -98,43 +99,40 @@ function BlogFilters({ filters, setFilters }) {
                                     category: "",
                                 }))
                             }
+                            className="hover:text-red-500 transition-colors cursor-pointer"
                         >
                             ✕
                         </button>
                     </span>
                 )}
                 {filters.tag && (
-                    <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full flex items-center gap-1">
+                    <span className="bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
                         {filters.tag}
                         <button
                             onClick={() =>
-                                setFilters((prev) => ({
-                                    ...prev,
-                                    tag: "",
-                                }))
+                                setFilters((prev) => ({ ...prev, tag: "" }))
                             }
+                            className="hover:text-red-500 transition-colors cursor-pointer"
                         >
                             ✕
                         </button>
                     </span>
                 )}
                 {filters.mine && (
-                    <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full flex items-center gap-1">
+                    <span className="bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200 px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
                         My Blogs
                         <button
                             onClick={() =>
-                                setFilters((prev) => ({
-                                    ...prev,
-                                    mine: false,
-                                }))
+                                setFilters((prev) => ({ ...prev, mine: false }))
                             }
+                            className="hover:text-red-500 transition-colors cursor-pointer"
                         >
                             ✕
                         </button>
                     </span>
                 )}
             </div>
-        </>
+        </div>
     );
 }
 

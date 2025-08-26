@@ -17,24 +17,25 @@ function CategoryCombobox({
             }
         >
             <div className="relative w-48">
-                <div className="relative cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none sm:text-sm">
+                <div className="relative cursor-default overflow-hidden rounded-md bg-white dark:bg-gray-900 text-left shadow-md focus:outline-none sm:text-sm">
                     <Combobox.Input
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                        className="block w-full rounded-md bg-white dark:bg-gray-800 px-3 py-1.5 text-base text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-700 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                         displayValue={(cat) => cat}
                         placeholder="Select Category"
                         onChange={(e) => setCategoryQuery(e.target.value)}
                     />
-                    <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
-                        <ChevronDown className="w-5 h-5 text-gray-400" />
+                    <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2 cursor-pointer">
+                        <ChevronDown className="w-5 h-5 text-gray-400 dark:text-gray-300" />
                     </Combobox.Button>
                 </div>
+
                 <Transition
                     as={Fragment}
                     leave="transition ease-in duration-100"
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >
-                    <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-10">
+                    <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-gray-900 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-10">
                         {filteredCategories.map((cat) => (
                             <Combobox.Option
                                 key={cat}
@@ -43,7 +44,7 @@ function CategoryCombobox({
                                     `cursor-default select-none relative px-4 py-2 ${
                                         active
                                             ? "bg-blue-500 text-white"
-                                            : "text-gray-900"
+                                            : "text-gray-900 dark:text-gray-200"
                                     }`
                                 }
                             >
@@ -59,7 +60,7 @@ function CategoryCombobox({
                                             {cat}
                                         </span>
                                         {selected && (
-                                            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-600">
+                                            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-600 dark:text-blue-300">
                                                 <Check className="w-5 h-5" />
                                             </span>
                                         )}
