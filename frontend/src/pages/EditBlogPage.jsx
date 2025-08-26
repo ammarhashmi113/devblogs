@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { Home, ChevronRight } from "lucide-react";
 
 import { useUser } from "../contexts/userContext";
 import api from "../utils/axiosConfig";
@@ -76,6 +77,33 @@ function EditBlogPage() {
     return (
         <div className="flex min-h-screen flex-col justify-center px-6 py-12 lg:px-8 bg-white dark:bg-gray-900 transition-colors duration-300">
             <div className="sm:mx-auto sm:w-full sm:max-w-2xl">
+                <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400 mb-6">
+                    {/* Home link */}
+                    <Link
+                        to="/"
+                        className="flex items-center gap-1 hover:text-blue-500 transition-colors"
+                    >
+                        <Home className="w-4 h-4" />
+                        <span>Blogs</span>
+                    </Link>
+
+                    {/* Separator */}
+                    <ChevronRight className="w-4 h-4" />
+
+                    {/* Blog Page Link (truncate if long) */}
+                    <Link
+                        to={`/blogs/${id}`}
+                        className="flex items-center gap-1 hover:text-blue-500 transition-colors"
+                    >
+                        <span className="truncate max-w-[200px]">
+                            {initialValues.title}
+                        </span>
+                    </Link>
+
+                    {/* Separator */}
+                    <ChevronRight className="w-4 h-4" />
+                    <span>Edit</span>
+                </div>
                 <h1 className="text-center text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
                     Edit Blog
                 </h1>

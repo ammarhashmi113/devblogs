@@ -70,7 +70,7 @@ function BlogDetailsPage() {
                         <ChevronRight className="w-4 h-4" />
 
                         {/* Current page Placeholder */}
-                        <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+                        <div className="h-4 w-32 bg-gray-300 dark:bg-gray-700 rounded animate-pulse" />
                     </div>
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         <div className="lg:col-span-2 space-y-8">
