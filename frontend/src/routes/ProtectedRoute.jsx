@@ -7,7 +7,7 @@ function ProtectedRoute({ children }) {
     const { user, userLoading } = useUser();
 
     if (userLoading) {
-        if (loading) return <LoadingSpinner label="Loading" />;
+        return <LoadingSpinner label="Loading" />;
     }
 
     if (!user) {

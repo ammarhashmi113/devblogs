@@ -13,6 +13,7 @@ import {
     LogIn,
     CircleUser,
     LogOut,
+    PencilLine,
 } from "lucide-react";
 import { useUser } from "../contexts/userContext";
 import { useClickOutside } from "../hooks/useClickOutside";
@@ -115,12 +116,23 @@ export default function BlogNavbar() {
                             <a
                                 key={link.name}
                                 href={link.href}
-                                className="text-sm font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                                className="text-sm font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors w-15"
                             >
                                 {link.icon}
                                 {link.name}
                             </a>
                         ))}
+                        {user ? (
+                            <a
+                                href="/blogs/new"
+                                className="text-sm font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors w-15"
+                            >
+                                <PencilLine className="size-4 inline mr-1 mb-1" />
+                                New
+                            </a>
+                        ) : (
+                            <div className="w-15"></div>
+                        )}
                     </nav>
 
                     {/* Right side */}

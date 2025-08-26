@@ -5,7 +5,7 @@ import api from "../utils/axiosConfig";
 import { useUser } from "../contexts/userContext";
 
 function ProfileForm({ mode = "edit" }) {
-    const { user, userLoading, setUser } = useUser();
+    const { user, setUser } = useUser();
     const navigate = useNavigate();
 
     const isEdit = mode === "edit";
@@ -35,8 +35,6 @@ function ProfileForm({ mode = "edit" }) {
             );
         }
     }
-
-    if (userLoading) return <div>Loading...</div>;
 
     return (
         <div className="flex min-h-screen flex-col justify-center px-6 py-12 lg:px-8 bg-white dark:bg-gray-900 transition-colors duration-300">
