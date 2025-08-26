@@ -218,19 +218,69 @@ app.get("/", (req, res) => {
 });
 
 // GET all blogposts
+// app.get(
+//     "/api/posts",
+//     catchAsync(async (req, res) => {
+//         console.log("GET BLOGPOSTS REQUEST WAS MADE");
+//         const limit = parseInt(req.query.limit) || 0; // 0 = no limit
+//         const allBlogs = await Blog.find({})
+//             .sort({ createdAt: -1 })
+//             .limit(limit)
+//             .populate({
+//                 path: "author",
+//                 select: "username name role about imageUrl",
+//             });
+//         res.status(200).json({ status: "success", data: { blogs: allBlogs } });
+//     })
+// );
+
 app.get(
     "/api/posts",
+    authOptional,
     catchAsync(async (req, res) => {
-        console.log("GET BLOGPOSTS REQUEST WAS MADE");
-        const limit = parseInt(req.query.limit) || 0; // 0 = no limit
-        const allBlogs = await Blog.find({})
+        let { userId, mine, page = 1, limit = 10, category, tag } = req.query;
+
+        page = parseInt(page);
+        limit = parseInt(limit);
+
+        const query = {};
+
+        // Filter by logged-in user
+        if (mine === "true" && req.user) query.author = req.user._id;
+
+        // Filter by a specific user
+        if (userId) query.author = userId;
+
+        // Optional category filter
+        if (category) query.category = category.toLowerCase().trim();
+
+        // Optional tag filter
+        if (tag) query.tags = tag.toLowerCase().trim();
+
+        // Total blogs for pagination metadata
+        const totalBlogs = await Blog.countDocuments(query);
+
+        const blogs = await Blog.find(query)
             .sort({ createdAt: -1 })
+            .skip((page - 1) * limit)
             .limit(limit)
             .populate({
                 path: "author",
                 select: "username name role about imageUrl",
             });
-        res.status(200).json({ status: "success", data: { blogs: allBlogs } });
+
+        res.status(200).json({
+            status: "success",
+            data: {
+                blogs,
+                pagination: {
+                    total: totalBlogs,
+                    page,
+                    limit,
+                    totalPages: Math.ceil(totalBlogs / limit),
+                },
+            },
+        });
     })
 );
 
