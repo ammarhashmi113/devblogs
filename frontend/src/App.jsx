@@ -10,7 +10,7 @@ import GuestRoute from "./routes/GuestRoute";
 
 import Navbar from "./components/Navbar";
 
-import BlogsPage from "./pages/BlogsPage";
+import BlogsPage from "./pages/BlogsPage/BlogsPage";
 import BlogDetailsPage from "./pages/BlogDetailsPage/BlogDetailsPage";
 import LoginPage from "./pages/LoginPage";
 import ProfileForm from "./pages/RegisterAndProfileEdit";
