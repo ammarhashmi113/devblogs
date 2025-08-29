@@ -254,8 +254,11 @@ app.get(
         // Optional category filter
         if (category) query.category = category.toLowerCase().trim();
 
-        // Optional tag filter
-        if (tag) query.tags = tag.toLowerCase().trim();
+        // Optional tag filter (support single or multiple tags)
+        if (tag) {
+            const tagArray = Array.isArray(tag) ? tag : [tag];
+            query.tags = { $in: tagArray.map((t) => t.toLowerCase().trim()) };
+        }
 
         // Total blogs for pagination metadata
         const totalBlogs = await Blog.countDocuments(query);
