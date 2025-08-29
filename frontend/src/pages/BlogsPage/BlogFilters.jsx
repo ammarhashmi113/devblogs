@@ -25,7 +25,7 @@ const CATEGORIES = [
 function BlogFilters({ filters, setFilters }) {
     const { user } = useUser();
     const [categoryQuery, setCategoryQuery] = useState("");
-    const [tagInput, setTagInput] = useState("");
+    const [tagInput, setTagInput] = useState([]);
 
     const filteredCategories =
         categoryQuery === ""
@@ -80,7 +80,10 @@ function BlogFilters({ filters, setFilters }) {
                             if (e.key === "Enter" && tagInput.trim() !== "") {
                                 setFilters((prev) => ({
                                     ...prev,
-                                    tag: tagInput.trim().toLowerCase(),
+                                    tags: [
+                                        ...prev.tags,
+                                        tagInput.trim().toLowerCase(),
+                                    ],
                                 }));
                                 setTagInput("");
                             }
@@ -108,19 +111,26 @@ function BlogFilters({ filters, setFilters }) {
                         </button>
                     </span>
                 )}
-                {filters.tag && (
-                    <span className="bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200 px-3 py-1  mt-1 mb-1 sm:mt-2 sm:mb-2 rounded-full flex items-center gap-1 shadow-sm">
-                        {filters.tag}
+                {filters.tags.map((tag) => (
+                    <span
+                        key={tag}
+                        className="bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200 
+               px-3 py-1 mt-1 mb-1 sm:mt-2 sm:mb-2 rounded-full flex items-center gap-1 shadow-sm"
+                    >
+                        {tag}
                         <button
                             onClick={() =>
-                                setFilters((prev) => ({ ...prev, tag: "" }))
+                                setFilters((prev) => ({
+                                    ...prev,
+                                    tags: prev.tags.filter((t) => t !== tag),
+                                }))
                             }
                             className="hover:text-red-500 transition-colors cursor-pointer"
                         >
                             ✕
                         </button>
                     </span>
-                )}
+                ))}
                 {filters.mine && (
                     <span className="bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200 px-3 py-1  mt-1 mb-1 sm:mt-2 sm:mb-2 rounded-full flex items-center gap-1 shadow-sm">
                         My Blogs

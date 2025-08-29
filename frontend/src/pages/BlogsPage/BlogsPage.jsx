@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Filter, ChevronDown } from "lucide-react";
 import { Disclosure } from "@headlessui/react";
 import { motion, AnimatePresence } from "framer-motion";
+import qs from "qs";
 
 import { useUser } from "../../contexts/userContext";
 import api from "../../utils/axiosConfig";
@@ -21,7 +22,7 @@ function BlogsPage() {
     const [filters, setFilters] = useState({
         mine: false,
         category: "",
-        tag: "",
+        tags: [],
     });
 
     useEffect(() => {
@@ -39,9 +40,13 @@ function BlogsPage() {
                 limit,
                 ...(filters.mine && user && { mine: true }),
                 ...(filters.category && { category: filters.category }),
-                ...(filters.tag && { tag: filters.tag }),
+                ...(filters.tags.length && { tag: filters.tags }),
             };
-            const res = await api.get("/posts", { params });
+            const res = await api.get("/posts", {
+                params,
+                paramsSerializer: (params) =>
+                    qs.stringify(params, { arrayFormat: "repeat" }),
+            });
             setBlogs(res.data.data.blogs);
             setTotalPages(res.data.data.pagination.totalPages);
         } catch (err) {
