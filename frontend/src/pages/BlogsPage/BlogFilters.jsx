@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Plus, X } from "lucide-react";
 import { useUser } from "../../contexts/userContext";
 import CategoryCombobox from "./CategoryCombobox";
 
@@ -33,6 +34,15 @@ function BlogFilters({ filters, setFilters }) {
             : CATEGORIES.filter((cat) =>
                   cat.toLowerCase().includes(categoryQuery.toLowerCase())
               );
+
+    const handleAddTag = () => {
+        if (!tagInput.trim()) return;
+        setFilters((prev) => ({
+            ...prev,
+            tags: [...prev.tags, tagInput.trim().toLowerCase()],
+        }));
+        setTagInput("");
+    };
 
     return (
         <>
@@ -71,32 +81,39 @@ function BlogFilters({ filters, setFilters }) {
                         filteredCategories={filteredCategories}
                     />
 
-                    <input
-                        type="text"
-                        placeholder="Filter by Tag"
-                        value={tagInput}
-                        onChange={(e) => setTagInput(e.target.value)}
-                        onKeyDown={(e) => {
-                            if (e.key === "Enter" && tagInput.trim() !== "") {
-                                setFilters((prev) => ({
-                                    ...prev,
-                                    tags: [
-                                        ...prev.tags,
-                                        tagInput.trim().toLowerCase(),
-                                    ],
-                                }));
-                                setTagInput("");
-                            }
-                        }}
-                        className="relative w-38 sm:w-48 rounded-md bg-white dark:bg-gray-800 px-3 py-1.5 text-base text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-700 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                    />
+                    <div className="flex w-fit">
+                        <input
+                            type="text"
+                            placeholder="Filter by Tags"
+                            value={tagInput}
+                            onChange={(e) => setTagInput(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") handleAddTag();
+                            }}
+                            className="w-28 sm:w-38 rounded-l-md bg-white dark:bg-gray-800 px-3 py-1.5 text-base 
+      text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-700 
+      placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 text-sm"
+                        />
+                        <button
+                            type="button"
+                            disabled={tagInput.length === 0}
+                            onClick={handleAddTag}
+                            className="px-3 py-1.5 rounded-r-md bg-indigo-600 dark:bg-indigo-500 
+      text-white text-sm flex items-center justify-center cursor-pointer disabled:cursor-not-allowed"
+                        >
+                            <Plus className="w-4 h-4" />
+                        </button>
+                    </div>
                 </div>
             </div>
 
             {/* Active Filter Chips */}
             <div className="flex flex-wrap justify-center gap-2 mt-1.5 mb-1.5 sm:mt-2 sm:mb-2 text-sm">
                 {filters.category && (
-                    <span className="bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-3 py-1 mt-1 mb-1 sm:mt-2 sm:mb-2 rounded-full flex items-center gap-1 shadow-sm">
+                    <span
+                        className="bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-3 py-1 mt-1 mb-1 sm:mt-2 sm:mb-2 
+                    rounded-full flex items-center gap-1 shadow-sm"
+                    >
                         {filters.category}
                         <button
                             onClick={() =>
@@ -132,7 +149,10 @@ function BlogFilters({ filters, setFilters }) {
                     </span>
                 ))}
                 {filters.mine && (
-                    <span className="bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200 px-3 py-1  mt-1 mb-1 sm:mt-2 sm:mb-2 rounded-full flex items-center gap-1 shadow-sm">
+                    <span
+                        className="bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200 px-3 py-1 mt-1 mb-1 sm:mt-2 sm:mb-2 
+                    rounded-full flex items-center gap-1 shadow-sm"
+                    >
                         My Blogs
                         <button
                             onClick={() =>

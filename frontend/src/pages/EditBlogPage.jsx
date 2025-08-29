@@ -122,7 +122,7 @@ function EditBlogPage() {
                     disabled={loading}
                     className="mt-6 w-full rounded-md bg-red-600 px-3 py-2 text-white hover:bg-red-700 disabled:opacity-50"
                 >
-                    {loading ? "Processing..." : "Delete Blog"}
+                    {loading ? "Processing" : "Delete Blog"}
                 </button>
             </div>
         </div>

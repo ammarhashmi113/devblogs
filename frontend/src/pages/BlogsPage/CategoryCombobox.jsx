@@ -17,9 +17,9 @@ function CategoryCombobox({
             }
         >
             <div className="relative w-38 sm:w-48">
-                <div className="relative cursor-default overflow-hidden rounded-md bg-white dark:bg-gray-900 text-left focus:outline-none sm:text-sm">
+                <div className="relative cursor-default overflow-hidden rounded-md bg-white dark:bg-gray-900 text-left focus:outline-none text-sm">
                     <Combobox.Input
-                        className="block w-full rounded-md bg-white dark:bg-gray-800 px-3 py-1.5 text-base text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-700 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                        className="block w-full rounded-md bg-white dark:bg-gray-800 px-3 py-1.5 text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-700 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
                         displayValue={(cat) => cat}
                         placeholder="Select Category"
                         onChange={(e) => setCategoryQuery(e.target.value)}
