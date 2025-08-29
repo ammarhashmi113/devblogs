@@ -16,8 +16,8 @@ function CategoryCombobox({
                 setFilters((prev) => ({ ...prev, category: val }))
             }
         >
-            <div className="relative w-48">
-                <div className="relative cursor-default overflow-hidden rounded-md bg-white dark:bg-gray-900 text-left shadow-md focus:outline-none sm:text-sm">
+            <div className="relative w-38 sm:w-48">
+                <div className="relative cursor-default overflow-hidden rounded-md bg-white dark:bg-gray-900 text-left focus:outline-none sm:text-sm">
                     <Combobox.Input
                         className="block w-full rounded-md bg-white dark:bg-gray-800 px-3 py-1.5 text-base text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-700 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                         displayValue={(cat) => cat}
@@ -41,14 +41,14 @@ function CategoryCombobox({
                                 key={cat}
                                 value={cat}
                                 className={({ active }) =>
-                                    `cursor-default select-none relative px-4 py-2 ${
+                                    `cursor-pointer select-none relative px-4 py-2 ${
                                         active
                                             ? "bg-blue-500 text-white"
                                             : "text-gray-900 dark:text-gray-200"
                                     }`
                                 }
                             >
-                                {({ selected }) => (
+                                {({ selected, active }) => (
                                     <>
                                         <span
                                             className={`block truncate ${
@@ -60,7 +60,12 @@ function CategoryCombobox({
                                             {cat}
                                         </span>
                                         {selected && (
-                                            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-600 dark:text-blue-300">
+                                            <span
+                                                className={`absolute inset-y-0 right-3 flex items-center pl-3 text-blue-600 dark:text-blue-300 ${
+                                                    active &&
+                                                    "text-white dark:text-white"
+                                                }`}
+                                            >
                                                 <Check className="w-5 h-5" />
                                             </span>
                                         )}

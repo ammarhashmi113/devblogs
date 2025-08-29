@@ -35,11 +35,11 @@ function BlogFilters({ filters, setFilters }) {
               );
 
     return (
-        <div className="mt-6 flex flex-col items-center gap-4">
+        <>
             {/* Filters Row */}
-            <div className="flex flex-wrap justify-center gap-4 w-full max-w-xl">
-                {/* My Blogs Toggle */}
-                {user && (
+            <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
+                {/* Left side */}
+                {user ? (
                     <label className="inline-flex items-center cursor-pointer">
                         <input
                             type="checkbox"
@@ -57,40 +57,43 @@ function BlogFilters({ filters, setFilters }) {
                             My Blogs
                         </span>
                     </label>
+                ) : (
+                    <div></div>
                 )}
 
-                {/* Category Combobox */}
-                <CategoryCombobox
-                    filters={filters}
-                    setFilters={setFilters}
-                    categoryQuery={categoryQuery}
-                    setCategoryQuery={setCategoryQuery}
-                    filteredCategories={filteredCategories}
-                />
+                {/* Right side */}
+                <div className="flex gap-2 flex-wrap justify-between">
+                    <CategoryCombobox
+                        filters={filters}
+                        setFilters={setFilters}
+                        categoryQuery={categoryQuery}
+                        setCategoryQuery={setCategoryQuery}
+                        filteredCategories={filteredCategories}
+                    />
 
-                {/* Tag Input */}
-                <input
-                    type="text"
-                    placeholder="Filter by Tag"
-                    value={tagInput}
-                    onChange={(e) => setTagInput(e.target.value)}
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter" && tagInput.trim() !== "") {
-                            setFilters((prev) => ({
-                                ...prev,
-                                tag: tagInput.trim().toLowerCase(),
-                            }));
-                            setTagInput("");
-                        }
-                    }}
-                    className="rounded-md bg-white dark:bg-gray-800 px-3 py-1.5 text-base text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-700 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                />
+                    <input
+                        type="text"
+                        placeholder="Filter by Tag"
+                        value={tagInput}
+                        onChange={(e) => setTagInput(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter" && tagInput.trim() !== "") {
+                                setFilters((prev) => ({
+                                    ...prev,
+                                    tag: tagInput.trim().toLowerCase(),
+                                }));
+                                setTagInput("");
+                            }
+                        }}
+                        className="relative w-38 sm:w-48 rounded-md bg-white dark:bg-gray-800 px-3 py-1.5 text-base text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-700 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                    />
+                </div>
             </div>
 
             {/* Active Filter Chips */}
-            <div className="flex flex-wrap justify-center gap-2 mt-4">
+            <div className="flex flex-wrap justify-center gap-2 mt-1.5 mb-1.5 sm:mt-2 sm:mb-2 text-sm">
                 {filters.category && (
-                    <span className="bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
+                    <span className="bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-3 py-1 mt-1 mb-1 sm:mt-2 sm:mb-2 rounded-full flex items-center gap-1 shadow-sm">
                         {filters.category}
                         <button
                             onClick={() =>
@@ -106,7 +109,7 @@ function BlogFilters({ filters, setFilters }) {
                     </span>
                 )}
                 {filters.tag && (
-                    <span className="bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
+                    <span className="bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200 px-3 py-1  mt-1 mb-1 sm:mt-2 sm:mb-2 rounded-full flex items-center gap-1 shadow-sm">
                         {filters.tag}
                         <button
                             onClick={() =>
@@ -119,7 +122,7 @@ function BlogFilters({ filters, setFilters }) {
                     </span>
                 )}
                 {filters.mine && (
-                    <span className="bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200 px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
+                    <span className="bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200 px-3 py-1  mt-1 mb-1 sm:mt-2 sm:mb-2 rounded-full flex items-center gap-1 shadow-sm">
                         My Blogs
                         <button
                             onClick={() =>
@@ -132,7 +135,7 @@ function BlogFilters({ filters, setFilters }) {
                     </span>
                 )}
             </div>
-        </div>
+        </>
     );
 }
 
