@@ -171,16 +171,18 @@ function ProfilePageLayout({
                                     currentActivity.map((b) => (
                                         <div
                                             key={b._id}
-                                            className="p-5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm hover:shadow-lg transition duration-200"
+                                            className="p-5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm hover:shadow-lg transition duration-200 group"
                                         >
                                             {/* Blog Title */}
                                             <a
                                                 href={`/blogs/${b._id}`}
-                                                className="block group"
+                                                className="relative inline-block"
                                             >
-                                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:underline">
+                                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                                                     {b.title}
                                                 </h3>
+                                                {/* underline */}
+                                                <span className="absolute left-0 bottom-0 h-[2px] w-0 bg-indigo-500 transition-all duration-300 group-hover:w-full"></span>
                                             </a>
 
                                             {/* Blog Snippet */}
@@ -202,7 +204,7 @@ function ProfilePageLayout({
                                     currentActivity.map((c) => (
                                         <div
                                             key={c._id}
-                                            className="p-5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm hover:shadow-lg transition duration-200"
+                                            className="p-5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm hover:shadow-lg transition duration-200 group"
                                         >
                                             {/* Comment Body */}
                                             <p className="text-gray-800 dark:text-gray-200 leading-relaxed">
@@ -210,17 +212,20 @@ function ProfilePageLayout({
                                             </p>
 
                                             {/* Blog Link */}
-                                            <a
-                                                href={`/blogs/${c.blog?._id}`}
-                                                className="block mt-3"
-                                            >
-                                                <p className="text-sm text-gray-600 dark:text-gray-400 hover:underline">
-                                                    on{" "}
+
+                                            <p className="text-sm text-gray-600 dark:text-gray-400">
+                                                on{" "}
+                                                <a
+                                                    href={`/blogs/${c.blog?._id}`}
+                                                    className="mt-3 mb-1 inline-block relative"
+                                                >
                                                     <span className="font-medium text-gray-900 dark:text-white">
                                                         {c.blog?.title}
                                                     </span>
-                                                </p>
-                                            </a>
+                                                    {/* underline */}
+                                                    <span className="absolute left-0 bottom-0 h-[2px] w-0 bg-indigo-500 transition-all duration-300 group-hover:w-full"></span>
+                                                </a>
+                                            </p>
 
                                             {/* Date */}
                                             <p className="text-xs text-gray-400 mt-1">
@@ -238,7 +243,7 @@ function ProfilePageLayout({
                                             key={l._id}
                                             className="p-5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm hover:shadow-lg transition duration-200 group"
                                         >
-                                            <a
+                                            <div
                                                 href={`/blogs/${l.blog?._id}`}
                                                 className="block"
                                             >
@@ -249,21 +254,25 @@ function ProfilePageLayout({
                                                     <span className="font-medium">
                                                         Liked
                                                     </span>{" "}
-                                                    <span className="font-semibold text-gray-900 dark:text-white group-hover:underline">
+                                                    <span className="font-semibold text-gray-900 dark:text-white relative">
                                                         {l.blog?.title}
+                                                        {/* underline */}
+                                                        <span className="absolute left-0 bottom-0 h-[2px] w-0 bg-indigo-500 transition-all duration-300 group-hover:w-full"></span>
                                                     </span>
                                                 </p>
                                                 <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
                                                     by{" "}
                                                     <a
                                                         href={`/users/${l.blog?.author?.username}`}
-                                                        className="hover:underline text-gray-600 dark:text-gray-300"
+                                                        className=" text-gray-600 dark:text-gray-300 relative"
                                                     >
                                                         {l.blog?.author?.name ||
                                                             "Unknown"}
+                                                        {/* underline */}
+                                                        <span className="absolute left-0 bottom-0 h-[1px] w-0 bg-indigo-500 group-hover:w-full"></span>
                                                     </a>
                                                 </p>
-                                            </a>
+                                            </div>
                                         </div>
                                     ))}
                             </>
