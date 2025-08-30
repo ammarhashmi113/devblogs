@@ -49,16 +49,21 @@ function BlogCard({ blog }) {
             </div>
 
             {/* Author Info */}
-            <div className="flex items-center gap-x-3 mt-6 pt-4 border-t border-gray-100 dark:border-gray-700">
+            <div className="flex items-center gap-x-3 mt-6 pt-4 border-t border-gray-100 dark:border-gray-700 block group">
                 <img
                     src={author.imageUrl || "/default-avatar.png"}
                     alt={author.name}
                     className="w-10 h-10 rounded-full object-cover border border-gray-300 dark:border-gray-700"
                 />
                 <div>
-                    <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                        {author.name}
-                    </p>
+                    <a
+                        href={`/users/${author.username}`}
+                        className="group-hover:underline"
+                    >
+                        <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                            {author.name}
+                        </p>
+                    </a>
                     <p className="text-xs text-gray-500 dark:text-gray-400">
                         {author.role}
                     </p>
