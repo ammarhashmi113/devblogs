@@ -118,7 +118,7 @@ function ProfilePageLayout({
                             setType(keys[index]);
                         }}
                     >
-                        <Tab.List className="flex space-x-4 border-b mb-6">
+                        <Tab.List className="flex space-x-4 border-b border-gray-300 dark:border-gray-700 mb-6">
                             {[
                                 {
                                     key: "blogs",
@@ -171,16 +171,24 @@ function ProfilePageLayout({
                                     currentActivity.map((b) => (
                                         <div
                                             key={b._id}
-                                            className="p-5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl hover:shadow-md transition"
+                                            className="p-5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm hover:shadow-lg transition duration-200"
                                         >
-                                            <a href={`/blogs/${b._id}`}>
-                                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                                            {/* Blog Title */}
+                                            <a
+                                                href={`/blogs/${b._id}`}
+                                                className="block group"
+                                            >
+                                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:underline">
                                                     {b.title}
                                                 </h3>
                                             </a>
-                                            <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">
+
+                                            {/* Blog Snippet */}
+                                            <p className="text-gray-700 dark:text-gray-300 text-sm mt-2 leading-relaxed">
                                                 {b.body?.slice(0, 120)}...
                                             </p>
+
+                                            {/* Date */}
                                             <p className="text-xs text-gray-400 mt-2">
                                                 {format(
                                                     new Date(b.createdAt),
@@ -194,19 +202,27 @@ function ProfilePageLayout({
                                     currentActivity.map((c) => (
                                         <div
                                             key={c._id}
-                                            className="p-5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl hover:shadow-md transition"
+                                            className="p-5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm hover:shadow-lg transition duration-200"
                                         >
-                                            <p className="text-gray-700 dark:text-gray-300">
+                                            {/* Comment Body */}
+                                            <p className="text-gray-800 dark:text-gray-200 leading-relaxed">
                                                 {c.body}
                                             </p>
-                                            <a href={`/blogs/${c.blog?._id}`}>
-                                                <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+
+                                            {/* Blog Link */}
+                                            <a
+                                                href={`/blogs/${c.blog?._id}`}
+                                                className="block mt-3"
+                                            >
+                                                <p className="text-sm text-gray-600 dark:text-gray-400 hover:underline">
                                                     on{" "}
-                                                    <span className="font-medium">
+                                                    <span className="font-medium text-gray-900 dark:text-white">
                                                         {c.blog?.title}
                                                     </span>
                                                 </p>
                                             </a>
+
+                                            {/* Date */}
                                             <p className="text-xs text-gray-400 mt-1">
                                                 {format(
                                                     new Date(c.createdAt),
@@ -220,21 +236,34 @@ function ProfilePageLayout({
                                     currentActivity.map((l) => (
                                         <div
                                             key={l._id}
-                                            className="p-5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl hover:shadow-md transition"
+                                            className="p-5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm hover:shadow-lg transition duration-200 group"
                                         >
-                                            <a href={`/blogs/${l.blog?._id}`}>
-                                                <p className="text-gray-700 dark:text-gray-300">
-                                                    ❤️ Liked{" "}
-                                                    <span className="font-semibold">
+                                            <a
+                                                href={`/blogs/${l.blog?._id}`}
+                                                className="block"
+                                            >
+                                                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                                                    <span className="mr-1">
+                                                        ❤️
+                                                    </span>
+                                                    <span className="font-medium">
+                                                        Liked
+                                                    </span>{" "}
+                                                    <span className="font-semibold text-gray-900 dark:text-white group-hover:underline">
                                                         {l.blog?.title}
                                                     </span>
                                                 </p>
+                                                <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                                                    by{" "}
+                                                    <a
+                                                        href={`/users/${l.blog?.author?.username}`}
+                                                        className="hover:underline text-gray-600 dark:text-gray-300"
+                                                    >
+                                                        {l.blog?.author?.name ||
+                                                            "Unknown"}
+                                                    </a>
+                                                </p>
                                             </a>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">
-                                                by{" "}
-                                                {l.blog?.author?.name ||
-                                                    "Unknown"}
-                                            </p>
                                         </div>
                                     ))}
                             </>
