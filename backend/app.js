@@ -212,6 +212,124 @@ app.put(
     })
 );
 
+// GET /api/users/:username/activity
+app.get(
+    "/api/users/:username/activity",
+    catchAsync(async (req, res, next) => {
+        console.log("ROUTE HIT 1");
+        const { username } = req.params;
+        let { type = "all", page = 1, limit = 10 } = req.query;
+
+        page = parseInt(page);
+        limit = parseInt(limit);
+
+        const user = await User.findOne({ username }).select("_id username");
+        if (!user) {
+            return next(new AppError("User not found", 404));
+        }
+
+        const skip = (page - 1) * limit;
+        const data = {};
+
+        // Blogs
+        if (type === "all" || type === "blogs") {
+            const totalBlogs = await Blog.countDocuments({ author: user._id });
+            const blogs = await Blog.find({ author: user._id })
+                .sort({ createdAt: -1 })
+                .skip(skip)
+                .limit(limit)
+                .populate("author", "username name imageUrl role");
+
+            data.blogs = {
+                results: blogs,
+                pagination: {
+                    total: totalBlogs,
+                    page,
+                    limit,
+                    totalPages: Math.ceil(totalBlogs / limit),
+                },
+            };
+        }
+
+        // Comments
+        if (type === "all" || type === "comments") {
+            const totalComments = await Comment.countDocuments({
+                author: user._id,
+            });
+            const comments = await Comment.find({ author: user._id })
+                .sort({ createdAt: -1 })
+                .skip(skip)
+                .limit(limit)
+                .populate("blog", "title _id")
+                .populate("author", "username name imageUrl role");
+
+            data.comments = {
+                results: comments,
+                pagination: {
+                    total: totalComments,
+                    page,
+                    limit,
+                    totalPages: Math.ceil(totalComments / limit),
+                },
+            };
+        }
+
+        // Likes
+        if (type === "all" || type === "likes") {
+            const totalLikes = await Like.countDocuments({ author: user._id });
+            const likes = await Like.find({ author: user._id })
+                .sort({ createdAt: -1 })
+                .skip(skip)
+                .limit(limit)
+                .populate({
+                    path: "blog",
+                    select: "title _id author",
+                    populate: {
+                        path: "author",
+                        select: "username name imageUrl role",
+                    },
+                });
+
+            data.likes = {
+                results: likes,
+                pagination: {
+                    total: totalLikes,
+                    page,
+                    limit,
+                    totalPages: Math.ceil(totalLikes / limit),
+                },
+            };
+        }
+
+        res.status(200).json({
+            status: "success",
+            data,
+        });
+    })
+);
+
+// GET a user data from username with /api/users/:username
+app.get(
+    "/api/users/:username",
+    catchAsync(async (req, res, next) => {
+        console.log("ROUTE HIT 2");
+        const { username } = req.params;
+
+        const user = await User.findOne({ username }).select(
+            "_id name username role about imageUrl createdAt"
+        ); // exclude email & password
+
+        if (!user) {
+            return next(new AppError("User not found", 404));
+        }
+
+        res.status(200).json({
+            status: "success",
+            data: { user },
+        });
+    })
+);
+
 // -----App Routes-----
 app.get("/", (req, res) => {
     res.send("Hello Devs");
