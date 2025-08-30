@@ -15,6 +15,7 @@ import BlogDetailsPage from "./pages/BlogDetailsPage/BlogDetailsPage";
 import LoginPage from "./pages/LoginPage";
 import ProfileForm from "./pages/RegisterAndProfileEdit";
 import ProfilePage from "./pages/ProfilePage";
+import PublicProfilePage from "./pages/PublicProfilePage";
 import CreateBlogPage from "./pages/CreateBlogPage";
 import EditBlogPage from "./pages/EditBlogPage";
 
@@ -56,7 +57,6 @@ function App() {
                             path="/blogs/:id"
                             element={<BlogDetailsPage />}
                         />
-
                         {/* protected routes */}
                         <Route
                             path="/blogs/:id/edit"
@@ -83,6 +83,10 @@ function App() {
                             }
                         />
                         <Route
+                            path="/users/:username"
+                            element={<PublicProfilePage />}
+                        />
+                        <Route
                             path="/blogs/new"
                             element={
                                 <ProtectedRoute>
@@ -90,7 +94,6 @@ function App() {
                                 </ProtectedRoute>
                             }
                         />
-
                         {/* guest-only routes */}
                         <Route
                             path="/login"
