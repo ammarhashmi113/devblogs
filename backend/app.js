@@ -568,7 +568,8 @@ app.get(
             .populate({
                 path: "author",
                 select: "username name role imageUrl",
-            });
+            })
+            .sort({ createdAt: -1 });
         res.status(200).json({
             status: "success",
             data: { comments: blogComments },
