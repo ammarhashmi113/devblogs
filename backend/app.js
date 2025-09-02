@@ -35,7 +35,16 @@ mongoose
 app.use(express.json());
 
 // Configuring Cors
-app.use(cors({ origin: "*", credentials: true }));
+const allowedOrigins = [
+    "http://localhost:5173", // dev
+    "https://ammar-devlogs.vercel.app", // prod
+];
+app.use(
+    cors({
+        origin: allowedOrigins,
+        credentials: true,
+    })
+);
 
 // -----Auth Routes-----
 
