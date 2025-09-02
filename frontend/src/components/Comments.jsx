@@ -7,24 +7,45 @@ import { useUser } from "../contexts/userContext";
 function Comments({ id }) {
     const { user } = useUser();
     const [comments, setComments] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [initialLoading, setInitialLoading] = useState(true);
+    const [loadingMore, setLoadingMore] = useState(false);
     const [newComment, setNewComment] = useState("");
     const [submitting, setSubmitting] = useState(false);
+    const [page, setPage] = useState(1);
+    const [limit] = useState(2); // comments per page
+    const [pagination, setPagination] = useState({
+        total: 0,
+        totalPages: 1,
+    });
 
-    async function fetchBlogComments() {
+    // Fetch Blog Comments
+    async function fetchBlogComments(pageNum = 1, append = false) {
         try {
-            const res = await api.get(`/posts/${id}/comments`);
-            setComments(res.data.data.comments);
+            if (!append) setInitialLoading(true); // only show "loading..." for first load
+            if (append) setLoadingMore(true);
+            const res = await api.get(`/posts/${id}/comments`, {
+                params: { page: pageNum, limit },
+            });
+
+            if (append) {
+                setComments((prev) => [...prev, ...res.data.data.comments]);
+            } else {
+                setComments(res.data.data.comments);
+            }
+
+            setPagination(res.data.data.pagination);
         } catch (err) {
             console.error("Error fetching blog comments:", err);
         } finally {
-            setLoading(false);
+            if (!append) setInitialLoading(false); // only stop loading for first load
+            if (append) setLoadingMore(false);
         }
     }
 
+    // Effect: reset on id change
     useEffect(() => {
-        fetchBlogComments();
-    }, [id]);
+        fetchBlogComments(page, page > 1); // append if page > 1
+    }, [id, page]);
 
     // Add Comment
     async function handleAddComment(e) {
@@ -35,7 +56,8 @@ function Comments({ id }) {
             setSubmitting(true);
             await api.post(`/posts/${id}/comments`, { body: newComment });
             setNewComment("");
-            fetchBlogComments();
+            setPage(1);
+            fetchBlogComments(1, false); // reset comments When posting new comment, reset back to page 1
         } catch (err) {
             console.error("Error posting comment:", err);
         } finally {
@@ -53,7 +75,7 @@ function Comments({ id }) {
         }
     }
 
-    if (loading) {
+    if (initialLoading) {
         return (
             <div className="text-gray-600 dark:text-gray-300">
                 Comments are loading...
@@ -67,12 +89,12 @@ function Comments({ id }) {
             <div className="flex items-center gap-2">
                 <MessageSquare className="w-5 h-5 text-gray-600 dark:text-gray-300" />
                 <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
-                    {comments.length} Comment{comments.length > 1 && "s"}
+                    {pagination.total} Comment{pagination.total > 1 && "s"}
                 </h2>
             </div>
 
-            {/* Comment Form (only if logged in) */}
-            {user && (
+            {/* Comment Form */}
+            {user ? (
                 <form onSubmit={handleAddComment} className="flex gap-2">
                     <input
                         type="text"
@@ -89,9 +111,7 @@ function Comments({ id }) {
                         {submitting ? "Posting..." : "Post"}
                     </button>
                 </form>
-            )}
-
-            {!user && (
+            ) : (
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                     You must be logged in to post a comment.
                 </p>
@@ -130,7 +150,6 @@ function Comments({ id }) {
                                 </p>
                             </div>
 
-                            {/* Show delete only if current user owns comment */}
                             {user && user._id === comment.author._id && (
                                 <button
                                     onClick={() =>
@@ -143,7 +162,6 @@ function Comments({ id }) {
                             )}
                         </div>
 
-                        {/* Body */}
                         <p className="text-gray-800 dark:text-gray-200">
                             {comment.body}
                         </p>
@@ -152,7 +170,20 @@ function Comments({ id }) {
                         </p>
                     </li>
                 ))}
+                {loadingMore && <div>More Comments Are Laoding...</div>}
             </ul>
+
+            {/* Load More Button */}
+            {pagination.totalPages > 1 && page < pagination.totalPages && (
+                <div className="flex justify-center pt-4">
+                    <button
+                        onClick={() => setPage((p) => p + 1)}
+                        className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-sm hover:bg-gray-300 dark:hover:bg-gray-600"
+                    >
+                        Load More
+                    </button>
+                </div>
+            )}
         </div>
     );
 }
