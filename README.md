@@ -1,6 +1,6 @@
-# 🧠 Devblogs
+# 🧠 DevLogs
 
-Welcome to **Devblogs**, a full-stack blogging platform built for developers by a developer. Here, users can read blogs, leave comments, like posts, and more, all powered by a clean React frontend and a secure Express + MongoDB backend.
+Welcome to **DevLogs**, a full-stack blogging platform built for developers by a developer. Here, users can read blogs, leave comments, like posts, and more, all powered by a clean React frontend and a secure Express + MongoDB backend.
 
 ---
 
@@ -30,7 +30,7 @@ Welcome to **Devblogs**, a full-stack blogging platform built for developers by 
 ## 📁 Project Structure
 
 ```
-devblogs/
+devlogs/
 ├── frontend/    # React + Vite frontend
 └── backend/     # Node.js + Express API
 ```
@@ -42,8 +42,8 @@ devblogs/
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/ammarhashmi113/devblogs.git
-cd devblogs
+git clone https://github.com/ammarhashmi113/devlogs.git
+cd devlogs
 ```
 
 ---

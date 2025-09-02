@@ -1,6 +1,6 @@
-# Devblogs Backend
+# DevLogs Backend
 
-This is the backend API for **Devblogs**, a full-stack blogging platform for developers. Built with **Node.js**, **Express**, and **MongoDB**, it handles all core functionalities including authentication, blog management, likes, and comments.
+This is the backend API for **DevLogs**, a full-stack blogging platform for developers. Built with **Node.js**, **Express**, and **MongoDB**, it handles all core functionalities including authentication, blog management, likes, and comments.
 
 ## 🔧 Tech Stack
 

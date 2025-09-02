@@ -1,6 +1,6 @@
-# Devblogs Frontend
+# DevLogs Frontend
 
-This is the frontend of **Devblogs**, a modern developer-focused blogging platform built with **React** and **Tailwind CSS**. It consumes the RESTful API from the backend to provide a full user experience including blog browsing, login, and detailed blog views.
+This is the frontend of **DevLogs**, a modern developer-focused blogging platform built with **React** and **Tailwind CSS**. It consumes the RESTful API from the backend to provide a full user experience including blog browsing, login, and detailed blog views.
 
 ## ⚛️ Tech Stack
 
