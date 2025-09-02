@@ -557,22 +557,64 @@ app.delete(
     })
 );
 
-// Get all comments of a particular blogpost
+// // Get all comments of a particular blogpost
+// app.get(
+//     "/api/posts/:id/comments",
+//     blogWithIdExists,
+//     catchAsync(async (req, res, next) => {
+//         const { id } = req.params;
+//         const blogComments = await Comment.find({ blog: id })
+//             .select("author body createdAt")
+//             .populate({
+//                 path: "author",
+//                 select: "username name role imageUrl",
+//             })
+//             .sort({ createdAt: -1 });
+//         res.status(200).json({
+//             status: "success",
+//             data: { comments: blogComments },
+//         });
+//     })
+// );
+
+// Get all comments of a particular blogpost (with pagination)
 app.get(
     "/api/posts/:id/comments",
     blogWithIdExists,
     catchAsync(async (req, res, next) => {
         const { id } = req.params;
+        let { page = 1, limit = 10 } = req.query;
+
+        page = parseInt(page);
+        limit = parseInt(limit);
+
+        const skip = (page - 1) * limit;
+
+        // Count total comments for pagination
+        const totalComments = await Comment.countDocuments({ blog: id });
+
+        // Fetch paginated comments
         const blogComments = await Comment.find({ blog: id })
             .select("author body createdAt")
             .populate({
                 path: "author",
                 select: "username name role imageUrl",
             })
-            .sort({ createdAt: -1 });
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+
         res.status(200).json({
             status: "success",
-            data: { comments: blogComments },
+            data: {
+                comments: blogComments,
+                pagination: {
+                    total: totalComments,
+                    page,
+                    limit,
+                    totalPages: Math.ceil(totalComments / limit),
+                },
+            },
         });
     })
 );
