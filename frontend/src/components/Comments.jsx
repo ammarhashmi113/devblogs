@@ -4,6 +4,9 @@ import { format } from "date-fns";
 import api from "../utils/axiosConfig";
 import { useUser } from "../contexts/userContext";
 
+import CommentsListSkeleton from "../skeletons/CommentsListSkeleton";
+import CommentSkeleton from "../skeletons/CommentSkeleton";
+
 function Comments({ id }) {
     const { user } = useUser();
     const [comments, setComments] = useState([]);
@@ -21,24 +24,23 @@ function Comments({ id }) {
     // Fetch Blog Comments
     async function fetchBlogComments(pageNum = 1, append = false) {
         try {
-            if (!append) setInitialLoading(true); // only show "loading..." for first load
-            if (append) setLoadingMore(true);
+            append ? setLoadingMore(true) : setInitialLoading(true); // only show "CommentsListSkeleton" for first load
+
             const res = await api.get(`/posts/${id}/comments`, {
                 params: { page: pageNum, limit },
             });
 
-            if (append) {
-                setComments((prev) => [...prev, ...res.data.data.comments]);
-            } else {
-                setComments(res.data.data.comments);
-            }
+            setComments((prev) =>
+                append
+                    ? [...prev, ...res.data.data.comments]
+                    : res.data.data.comments
+            );
 
             setPagination(res.data.data.pagination);
         } catch (err) {
             console.error("Error fetching blog comments:", err);
         } finally {
-            if (!append) setInitialLoading(false); // only stop loading for first load
-            if (append) setLoadingMore(false);
+            append ? setLoadingMore(false) : setInitialLoading(false);
         }
     }
 
@@ -76,11 +78,7 @@ function Comments({ id }) {
     }
 
     if (initialLoading) {
-        return (
-            <div className="text-gray-600 dark:text-gray-300">
-                Comments are loading...
-            </div>
-        );
+        return <CommentsListSkeleton />;
     }
 
     return (
@@ -170,20 +168,22 @@ function Comments({ id }) {
                         </p>
                     </li>
                 ))}
-                {loadingMore && <div>More Comments Are Laoding...</div>}
+                {loadingMore && <CommentSkeleton />}
             </ul>
 
             {/* Load More Button */}
-            {pagination.totalPages > 1 && page < pagination.totalPages && (
-                <div className="flex justify-center pt-4">
-                    <button
-                        onClick={() => setPage((p) => p + 1)}
-                        className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-sm hover:bg-gray-300 dark:hover:bg-gray-600"
-                    >
-                        Load More
-                    </button>
-                </div>
-            )}
+            {!loadingMore &&
+                pagination.totalPages > 1 &&
+                page < pagination.totalPages && (
+                    <div className="flex justify-center pt-4">
+                        <button
+                            onClick={() => setPage((p) => p + 1)}
+                            className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-sm hover:bg-gray-300 dark:hover:bg-gray-600"
+                        >
+                            Load More
+                        </button>
+                    </div>
+                )}
         </div>
     );
 }
