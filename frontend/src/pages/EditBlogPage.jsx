@@ -75,7 +75,7 @@ function EditBlogPage() {
 
         try {
             await toast.promise(api.delete(`/posts/${id}`), {
-                loadingDelete: "Deleting blog...",
+                loading: "Deleting blog...",
                 success: "Blog deleted successfully!",
                 error: (err) => err.response?.data?.message || "Delete failed.",
             });

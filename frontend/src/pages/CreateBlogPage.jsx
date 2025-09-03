@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Home, ChevronRight } from "lucide-react";
+import toast from "react-hot-toast";
 
 import api from "../utils/axiosConfig";
 
@@ -16,7 +17,12 @@ function CreateBlogPage() {
         setLoading(true);
         setError("");
         try {
-            await api.post("/posts", blogData);
+            await toast.promise(api.post("/posts", blogData), {
+                loading: "Creating blog...",
+                success: "Blog created successfully!",
+                error: (err) =>
+                    err.response?.data?.message || "Failed to create blog.",
+            });
             navigate("/");
         } catch (err) {
             setError(err.response?.data?.message || "Something went wrong");
