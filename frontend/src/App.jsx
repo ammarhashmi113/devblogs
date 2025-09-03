@@ -22,6 +22,7 @@ import EditBlogPage from "./pages/EditBlogPage";
 function App() {
     const [user, setUser] = useState(null);
     const [userLoading, setUserLoading] = useState(true);
+    const [darkMode, setDarkMode] = useState(false);
 
     async function fetchCurrentUser() {
         try {
@@ -44,12 +45,28 @@ function App() {
         }
     }, []); // this useEffect runs only when the app starts
 
+    useEffect(() => {
+        const savedTheme = localStorage.getItem("theme");
+        const isDark = savedTheme === "dark";
+        setDarkMode(isDark);
+        console.log("darkMode");
+        document.documentElement.classList.toggle("dark", isDark);
+    }, []);
+
     return (
         <>
-            <Toaster />
+            <Toaster
+                toastOptions={{
+                    className: "rounded-lg shadow-lg",
+                    style: {
+                        background: darkMode ? "#1f2937" : "#fff",
+                        color: darkMode ? "#fff" : "#000",
+                    },
+                }}
+            />
             <BrowserRouter>
                 <UserContext.Provider value={{ user, setUser, userLoading }}>
-                    <Navbar />
+                    <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
                     <Routes>
                         {/* open routes */}
                         <Route path="/" element={<BlogsPage />} />

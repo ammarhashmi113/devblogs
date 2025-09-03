@@ -33,7 +33,7 @@ const navLinks = [
     },
 ];
 
-export default function BlogNavbar() {
+function Navbar({ darkMode, setDarkMode }) {
     const navigate = useNavigate();
     const userDropdownRef = useRef(null);
     const mobileDropdownRef = useRef(null);
@@ -42,7 +42,6 @@ export default function BlogNavbar() {
     const { user, setUser, userLoading } = useUser();
     const [mobileOpen, setMobileOpen] = useState(false);
     const [userDropdownOpen, setUserDropdownOpen] = useState(false);
-    const [darkMode, setDarkMode] = useState(false);
     const [showLogoutModal, setShowLogoutModal] = useState(false);
 
     function toggleMobileOpen() {
@@ -78,12 +77,7 @@ export default function BlogNavbar() {
             localStorage.setItem("theme", "light");
         }
 
-        toast(`Theme Changed to ${newMode ? "Dark" : "Light"}`, {
-            style: {
-                background: newMode ? "#333" : "#fff",
-                color: newMode ? "#fff" : "#000",
-            },
-        });
+        toast(`Theme changed to ${newMode ? "Dark" : "Light"}`);
     }
 
     useEffect(() => {
@@ -293,3 +287,5 @@ export default function BlogNavbar() {
         </>
     );
 }
+
+export default Navbar;
