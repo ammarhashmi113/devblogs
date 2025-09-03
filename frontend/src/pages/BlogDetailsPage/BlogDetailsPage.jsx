@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { Home, ChevronRight } from "lucide-react";
+import toast from "react-hot-toast";
 
 import api from "../../utils/axiosConfig";
 
@@ -41,14 +42,18 @@ function BlogDetailsPage() {
     }, [id]);
 
     const handleDelete = async () => {
-        if (!window.confirm("Are you sure you want to delete this blog?"))
-            return;
+        setError("");
         try {
-            await api.delete(`/posts/${id}`);
+            await toast.promise(api.delete(`/posts/${id}`), {
+                loadingDelete: "Deleting blog...",
+                success: "Blog deleted successfully!",
+                error: (err) => err.response?.data?.message || "Delete failed.",
+            });
             navigate("/");
         } catch (err) {
-            console.error("Delete failed:", err);
-            setError(err.response?.data?.message || "Failed to delete blog");
+            setError(err.response?.data?.message || "Something went wrong");
+        } finally {
+            setLoadingDelete(false);
         }
     };
 

@@ -81,6 +81,8 @@ function EditBlogPage() {
             });
 
             navigate("/");
+        } catch (err) {
+            setError(err.response?.data?.message || "Something went wrong");
         } finally {
             setLoadingDelete(false);
         }
