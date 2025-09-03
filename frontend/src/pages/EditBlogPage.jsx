@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { Home, ChevronRight } from "lucide-react";
+import toast from "react-hot-toast";
 
 import { useUser } from "../contexts/userContext";
 import api from "../utils/axiosConfig";
@@ -45,10 +46,16 @@ function EditBlogPage() {
     }, [id, user, navigate]);
 
     const handleUpdate = async (blogData) => {
-        setLoading(true);
         setError("");
+        setLoading(true);
+
         try {
-            await api.put(`/posts/${id}`, blogData);
+            await toast.promise(api.put(`/posts/${id}`, blogData), {
+                loading: "Updating blog...",
+                success: "Blog updated successfully!",
+                error: (err) => err.response?.data?.message || "Update failed.",
+            });
+
             navigate(`/blogs/${id}`);
         } catch (err) {
             setError(err.response?.data?.message || "Something went wrong");
@@ -60,13 +67,18 @@ function EditBlogPage() {
     const handleDelete = async () => {
         if (!window.confirm("Are you sure you want to delete this blog?"))
             return;
-        setLoading(true);
+
         setError("");
+        setLoading(true);
+
         try {
-            await api.delete(`/posts/${id}`);
+            await toast.promise(api.delete(`/posts/${id}`), {
+                loading: "Deleting blog...",
+                success: "Blog deleted successfully!",
+                error: (err) => err.response?.data?.message || "Delete failed.",
+            });
+
             navigate("/");
-        } catch (err) {
-            setError(err.response?.data?.message || "Something went wrong");
         } finally {
             setLoading(false);
         }
