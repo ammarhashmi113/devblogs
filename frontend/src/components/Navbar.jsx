@@ -77,6 +77,13 @@ export default function BlogNavbar() {
             document.documentElement.classList.remove("dark");
             localStorage.setItem("theme", "light");
         }
+
+        toast(`Theme Changed to ${newMode ? "Dark" : "Light"}`, {
+            style: {
+                background: newMode ? "#333" : "#fff",
+                color: newMode ? "#fff" : "#000",
+            },
+        });
     }
 
     useEffect(() => {
