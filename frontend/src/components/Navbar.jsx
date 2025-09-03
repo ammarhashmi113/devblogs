@@ -1,6 +1,7 @@
 // "use client";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import {
     Menu,
     X,
@@ -57,6 +58,7 @@ export default function BlogNavbar() {
         setUser(null);
         setUserDropdownOpen(false);
         setShowLogoutModal(false);
+        toast.success("Logged out successfully");
         navigate("/");
     }
 
